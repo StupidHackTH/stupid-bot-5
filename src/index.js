@@ -11,6 +11,7 @@ client.cooldowns = new Discord.Collection()
 const commandFolders = fs.readdirSync("./src/commands")
 
 for (const folder of commandFolders) {
+    route = path.resolve(process.cwd(), route)
     const commandFiles = fs
         .readdirSync(`./src/commands/${folder}`)
         .filter((file) => file.endsWith(".js"))

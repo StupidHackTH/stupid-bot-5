@@ -5,11 +5,14 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "register": "node tool/register.js",
+    "unregister": "node tool/unregister.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0"
   }
