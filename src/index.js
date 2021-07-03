@@ -11,7 +11,6 @@ client.cooldowns = new Discord.Collection()
 const commandFolders = fs.readdirSync("./src/commands")
 
 for (const folder of commandFolders) {
-    route = path.resolve(process.cwd(), route)
     const commandFiles = fs
         .readdirSync(`./src/commands/${folder}`)
         .filter((file) => file.endsWith(".js"))
@@ -30,13 +29,14 @@ const eventFiles = fs
 
 for (const file of eventFiles) {
     const event = require(`./events/${file}`)
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args, client))
-    } else {
-        client.on(event.name, (...args) => event.execute(...args, client))
+    if (!event.async) {
+        if (event.type === "once") {
+            client.once(event.name, (...args) => event.execute(...args, client))
+        } else if (event.type === "on") {
+            client.on(event.name, (...args) => event.execute(...args, client))
+        }
+        console.log(`[Loaded event]: ${event.name}`)
     }
-
-    console.log(`[Loaded event]: ${event.name}`)
 }
 
 client.login(process.env.TOKEN)

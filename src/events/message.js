@@ -3,8 +3,8 @@ const Discord = require("discord.js")
 
 module.exports = {
     name: "message",
+    type: "on",
     execute(message, client) {
-        console.log(message.content)
         // detect command
         if (!message.content.startsWith(prefix) || message.author.bot) return
 

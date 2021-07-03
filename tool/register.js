@@ -18,7 +18,7 @@ for (const folder of commandFolders) {
         const command = require(`../src/commands/${folder}/${file}`)
 
         if (command.slash) {
-            slash.command(command.slash)
+            slash.command(command.slash.registerData)
 
             console.log(`[Registered]: ${command.name}`)
         }
