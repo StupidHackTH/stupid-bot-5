@@ -9,7 +9,7 @@ module.exports = {
                 type: 4,
             },
         },
-        execute(interaction, client, IM) {
+        execute(IM, client, interaction) {
             IM.reply(
                 "I'm a mindless stupid bot with ``stupid `` prefix. or just use ``/`` command"
             )

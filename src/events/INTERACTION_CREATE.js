@@ -64,7 +64,7 @@ module.exports = {
         setTimeout(() => timestamps.delete(UserId), cooldownAmount)
 
         try {
-            command.slash.execute(interaction, client, IM)
+            command.slash.execute(IM, client, interaction)
         } catch (error) {
             console.error(error)
             IM.reply("Error")
