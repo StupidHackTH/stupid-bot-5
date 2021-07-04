@@ -6,18 +6,12 @@ module.exports = {
             data: {
                 name: "bot",
                 description: "Get bot info",
-                type: 4,
             },
         },
-        execute(IM, client, interaction) {
-            IM.reply(
-                "I'm a mindless stupid bot with ``stupid `` prefix. or just use ``/`` command"
-            )
-        },
     },
-    execute(message) {
-        message.channel.send(
-            "I'm a mindless stupid bot with ``stupid `` prefix."
+    execute({ send }) {
+        send(
+            "I'm a mindless stupid bot with ``stupid `` prefix or you can you  ``/`` command"
         )
     },
 }

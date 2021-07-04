@@ -70,7 +70,13 @@ module.exports = {
         setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
 
         try {
-            command.execute(message, args)
+            command.execute({
+                type: 0,
+                client: message.client,
+                send: message.channel.send,
+                message,
+                args,
+            })
         } catch (error) {
             console.error(error)
             message.reply("there was an error trying to execute that command!")

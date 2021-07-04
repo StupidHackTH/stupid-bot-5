@@ -7,14 +7,10 @@ module.exports = {
             data: {
                 name: "ping",
                 description: "test bot response",
-                type: 4,
             },
         },
-        execute(interaction, client, IM) {
-            IM.reply("Im working bro")
-        },
     },
-    execute(message, args) {
-        message.channel.send("Im working bro")
+    execute({ send }) {
+        send("Im working bro")
     },
 }

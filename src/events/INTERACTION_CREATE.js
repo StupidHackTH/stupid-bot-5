@@ -1,5 +1,6 @@
 const Discord = require("discord.js")
 const fs = require("fs")
+const InterationManager = require("../lib/InteractionManager.js")
 const InteractionManager = require("../lib/InteractionManager.js")
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
 
         const commandName = interaction.data.name
 
-        console.log(interaction)
+        console.log(interaction.data)
 
         const command =
             client.commands.get(commandName) ||
@@ -63,8 +64,19 @@ module.exports = {
         timestamps.set(UserId, now)
         setTimeout(() => timestamps.delete(UserId), cooldownAmount)
 
+        const args =
+            "options" in interaction.data
+                ? interaction.data.options.map((e) => e.value)
+                : []
+
         try {
-            command.slash.execute(IM, client, interaction)
+            command.execute({
+                type: 1,
+                send: IM.reply,
+                client,
+                args,
+                interaction,
+            })
         } catch (error) {
             console.error(error)
             IM.reply("Error")

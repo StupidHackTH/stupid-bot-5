@@ -26,7 +26,6 @@ class Slash {
             description: options.data.description || "No description provided",
             options: options.data.options || [],
         }
-
         let config = {
             method: "POST",
             headers: {
