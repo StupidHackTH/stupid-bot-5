@@ -26,6 +26,7 @@ class Slash {
             description: options.data.description || "No description provided",
             options: options.data.options || [],
         }
+
         let config = {
             method: "POST",
             headers: {
@@ -39,7 +40,9 @@ class Slash {
         this.axios(config)
             .then((response) => {})
             .catch((err) => {
-                console.log(`[ERROR] Request failed\n${err}`)
+                console.log(
+                    `[ERROR] Request failed\n${err} at ${options.data.name}`
+                )
             })
 
         return this

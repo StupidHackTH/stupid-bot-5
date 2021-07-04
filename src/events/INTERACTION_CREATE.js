@@ -12,8 +12,6 @@ module.exports = {
 
         const commandName = interaction.data.name
 
-        console.log(interaction.data)
-
         const command =
             client.commands.get(commandName) ||
             client.commands.find(

@@ -73,7 +73,7 @@ module.exports = {
             command.execute({
                 type: 0,
                 client: message.client,
-                send: message.channel.send,
+                send: (s, ...args) => message.channel.send(s, ...args),
                 message,
                 args,
             })
