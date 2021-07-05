@@ -10,15 +10,11 @@ module.exports = {
             },
         },
     },
-    async execute({ type, client, send, interaction = {}, message = {} }) {
+    async execute({ client, send, member_id, guild_id }) {
         // get guild and member
-        const guildId = type === 1 ? interaction.guild_id : message.guild.id
-        console.log(guildId)
-        const guild = await client.guilds.fetch(guildId)
+        const guild = await client.guilds.fetch(guild_id)
 
-        const memberId =
-            type === 1 ? interaction.member.user.id : message.author.id
-        const member = guild.members.cache.get(memberId)
+        const member = guild.members.cache.get(member_id)
 
         for (const [key, role] of member.roles.cache) {
             if (role.name.startsWith("team")) {

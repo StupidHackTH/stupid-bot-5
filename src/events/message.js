@@ -74,6 +74,8 @@ module.exports = {
                 type: 0,
                 client: message.client,
                 send: (s, ...args) => message.channel.send(s, ...args),
+                guild_id: message.guild.id,
+                member_id: message.author.id,
                 message,
                 args,
             })

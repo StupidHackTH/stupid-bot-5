@@ -71,6 +71,8 @@ module.exports = {
             command.execute({
                 type: 1,
                 send: IM.reply,
+                guild_id: interaction.guild_id,
+                member_id: interaction.member.user.id,
                 client,
                 args,
                 interaction,
