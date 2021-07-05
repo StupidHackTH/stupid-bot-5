@@ -1,3 +1,7 @@
+// file system module to perform file operations
+const Discord = require("discord.js")
+const fs = require("fs")
+
 module.exports = {
     name: "createteam",
     description: "Create your team",
@@ -43,8 +47,6 @@ module.exports = {
             }
         }
 
-        console.log(availableTeam)
-
         if (availableTeam.length === 0) {
             return send(
                 "no empty team left, you should find other team to join"
@@ -57,5 +59,45 @@ module.exports = {
         // set team
         member.roles.add(randomTeam)
         send(`<@${member.id}> was assign to <@&${randomTeam.id}>`)
+
+        // create channel
+        const offset = 3
+        var newCategoryPosition = offset
+        for (const [key, channel] of guild.channels.cache) {
+            if (
+                channel.name.startsWith("team") &&
+                randomTeam.name.localeCompare(channel.name) === 1 &&
+                channel.type === "category"
+            ) {
+                console.log({ name: channel.name, newChannelPosition })
+                newChannelPosition++
+            }
+        }
+
+        guild.channels
+            .create(randomTeam.name, {
+                type: "category",
+                position: newCategoryPosition,
+                permissionOverwrites: [
+                    {
+                        id: randomTeam,
+                        allow: Discord.Permissions.FLAGS.VIEW_CHANNEL,
+                    },
+                    {
+                        id: guild.roles.everyone,
+                        deny: Discord.Permissions.FLAGS.VIEW_CHANNEL,
+                    },
+                ],
+            })
+            .then(async (newCategory) => {
+                await guild.channels.create("Voice chat", {
+                    type: "voice",
+                    parent: newCategory,
+                })
+                await guild.channels.create("text", {
+                    type: "text",
+                    parent: newCategory,
+                })
+            })
     },
 }

@@ -25,7 +25,7 @@ module.exports = {
         const guild = await client.guilds.fetch(guild_id)
 
         // args from prefix command will be <@!{id}> but from interaction will {id}
-        const invited_id = member_id.startsWith("<")
+        const invited_id = args[0].startsWith("<")
             ? args[0].slice(3, args[0].length - 1)
             : args[0]
 
