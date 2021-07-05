@@ -11,7 +11,7 @@ module.exports = {
             guildOnly: true,
             data: {
                 name: "createteam",
-                description: "assign you to empty team",
+                description: "assigns the user to an empty team",
             },
         },
     },
@@ -23,7 +23,7 @@ module.exports = {
 
         for (const [key, role] of member.roles.cache) {
             if (role.name.startsWith("team")) {
-                return send(`you already have team,<@${member.id}>.`)
+                return send(`You already have a team, <@${member.id}>.`)
             }
         }
 
@@ -41,7 +41,7 @@ module.exports = {
         // check if there exist available team
         if (availableTeam.length === 0) {
             return send(
-                "no empty team left, you should find other team to join"
+                "No empty teams left, you can only join other existing teams."
             )
         }
         // random 1 team
@@ -50,7 +50,7 @@ module.exports = {
 
         // set team
         member.roles.add(randomTeam)
-        send(`<@${member.id}> was assign to <@&${randomTeam.id}>`)
+        send(`<@${member.id}> was assigned to <@&${randomTeam.id}>!`)
 
         // create channel
         const offset = 3

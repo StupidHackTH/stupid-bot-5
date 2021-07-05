@@ -8,7 +8,7 @@ module.exports = {
             guildOnly: true,
             data: {
                 name: "leave",
-                description: "leave your team",
+                description: "removes user from a team",
             },
         },
     },
@@ -41,15 +41,15 @@ module.exports = {
                     }
 
                     return send(
-                        `<@${member.id}> has leave <@&${role.id}>` +
-                            `\n<@&${role.id}> is now empty`
+                        `<@${member.id}> has left <@&${role.id}>.` +
+                            `\n<@&${role.id}> is now empty.`
                     )
                 } else {
-                    return send(`<@${member.id}> has leave <@&${role.id}>`)
+                    return send(`<@${member.id}> has left <@&${role.id}>.`)
                 }
             }
         }
 
-        return send(`you don't have a team,<@${member.id}>.`)
+        return send(`You don't have a team, <@${member.id}>.`)
     },
 }
