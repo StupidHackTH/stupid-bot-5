@@ -35,7 +35,7 @@ module.exports = {
         // check if invited user already have team
         for (const [key, role] of invited.roles.cache) {
             if (role.name.startsWith("team")) {
-                return send(`<@${invited.id}> already have team.`)
+                return send(`<@${invited.id}> already has a team.`)
             }
         }
 
