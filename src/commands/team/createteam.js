@@ -5,6 +5,7 @@ const fs = require("fs")
 module.exports = {
     name: "createteam",
     description: "Create your team",
+    usage: "createteam",
     slash: {
         registerData: {
             guildOnly: true,
@@ -26,27 +27,18 @@ module.exports = {
             }
         }
 
-        // use set for optimization
-        var OccupiedRole = new Set()
-
-        for (const [key, value] of guild.members.cache) {
-            value._roles.forEach((RoleId) => {
-                OccupiedRole.add(RoleId)
-            })
-        }
-
         // get available team
-        const allRoles = (await guild.roles.fetch()).cache
+        const allRoles = guild.roles.cache
 
         var availableTeam = []
 
         for (const [key, role] of allRoles) {
-            // role.member doesnt work dont know why
-            if (role.name.startsWith("team") && !OccupiedRole.has(role.id)) {
+            if (role.name.startsWith("team") && role.members.size === 0) {
                 availableTeam.push(role)
             }
         }
 
+        // check if there exist available team
         if (availableTeam.length === 0) {
             return send(
                 "no empty team left, you should find other team to join"
@@ -90,11 +82,11 @@ module.exports = {
                 ],
             })
             .then(async (newCategory) => {
-                await guild.channels.create("Voice chat", {
+                guild.channels.create("Voice chat", {
                     type: "voice",
                     parent: newCategory,
                 })
-                await guild.channels.create("text", {
+                guild.channels.create("text", {
                     type: "text",
                     parent: newCategory,
                 })

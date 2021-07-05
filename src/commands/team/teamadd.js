@@ -32,8 +32,6 @@ module.exports = {
         const member = guild.members.cache.get(member_id)
         const invited = guild.members.cache.get(invited_id)
 
-        console.log({ member_id, guild_id, invited_id, member, guild, invited })
-
         // check if invited user already have team
         for (const [key, role] of invited.roles.cache) {
             if (role.name.startsWith("team")) {
@@ -44,6 +42,11 @@ module.exports = {
         for (const [key, role] of member.roles.cache) {
             // find team of invitor
             if (role.name.startsWith("team")) {
+                // check if team already full
+                if (role.members.size >= 3) {
+                    return send(`your team is full,<@${member.id}>.`)
+                }
+
                 const team = role
                 invited.roles.add(team)
                 return send(`<@${invited.id}> was added to <@&${team.id}>`)
