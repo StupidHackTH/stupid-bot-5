@@ -30,7 +30,7 @@ module.exports = {
                     for (const [key, channel] of guild.channels.cache) {
                         if (
                             channel.type === "category" &&
-                            channel.name === role.name
+                            channel.name.startsWith(role.name)
                         ) {
                             const category = channel
                             for (const [childkey, child] of category.children) {
