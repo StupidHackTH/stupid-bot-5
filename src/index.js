@@ -7,6 +7,14 @@ const client = new Discord.Client()
 client.commands = new Discord.Collection()
 client.cooldowns = new Discord.Collection()
 
+// Cool client side thing
+const http = require("http")
+
+http.createServer((req, res) => {
+    res.write('Hello World!')
+    res.end()
+}).listen(80);
+
 // load command
 const commandFolders = fs.readdirSync("./src/commands")
 
