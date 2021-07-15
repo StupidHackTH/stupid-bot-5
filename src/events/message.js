@@ -57,11 +57,7 @@ module.exports = {
             if (now < expirationTime) {
                 const timeLeft = (expirationTime - now) / 1000
                 return message.reply(
-                    `please wait ${timeLeft.toFixed(
-                        1
-                    )} more second(s) before reusing the \`${
-                        command.name
-                    }\` command.`
+                    `Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`
                 )
             }
         }
@@ -81,7 +77,7 @@ module.exports = {
             })
         } catch (error) {
             console.error(error)
-            message.reply("there was an error trying to execute that command!")
+            message.reply("There was an error trying to execute that command!")
         }
     },
 }

@@ -52,7 +52,7 @@ module.exports = {
         } catch (error) {
             console.error(error)
             send(
-                `There was an error while reloading a command \`${command.name}\`:\n\`${error.message}\``
+                `There was an error while reloading a command: \`${command.name}\`:\n\`${error.message}\``
             )
         }
     },

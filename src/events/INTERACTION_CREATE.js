@@ -49,11 +49,7 @@ module.exports = {
 
             if (now < expirationTime) {
                 const timeLeft = (expirationTime - now) / 1000
-                reply = `please wait ${timeLeft.toFixed(
-                    1
-                )} more second(s) before reusing the \`${
-                    command.name
-                }\` command.`
+                reply = `Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`
 
                 IM.reply(reply)
             }

@@ -8,7 +8,7 @@ module.exports = {
             guildOnly: true,
             data: {
                 name: "teamadd",
-                description: "add member to your team",
+                description: "add a member to a team",
                 options: [
                     {
                         name: "user",
@@ -35,7 +35,7 @@ module.exports = {
         // check if invited user already have team
         for (const [key, role] of invited.roles.cache) {
             if (role.name.startsWith("team")) {
-                return send(`<@${invited.id}> already have team`)
+                return send(`<@${invited.id}> already has a team.`)
             }
         }
 
@@ -44,14 +44,14 @@ module.exports = {
             if (role.name.startsWith("team")) {
                 // check if team already full
                 if (role.members.size >= 3) {
-                    return send(`your team is full,<@${member.id}>.`)
+                    return send(`Your team is full, <@${member.id}>.`)
                 }
 
                 const team = role
                 invited.roles.add(team)
-                return send(`<@${invited.id}> was added to <@&${team.id}>`)
+                return send(`<@${invited.id}> was added to <@&${team.id}>.`)
             }
         }
-        return send(`you don't have a team,<@${member.id}>.`)
+        return send(`You don't have a team, <@${member.id}>.`)
     },
 }

@@ -6,11 +6,11 @@ module.exports = {
             guildOnly: true,
             data: {
                 name: "ping",
-                description: "test bot response",
+                description: "pong",
             },
         },
     },
     execute({ send }) {
-        send("Im working bro")
+        send("pong")
     },
 }
