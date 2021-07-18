@@ -1,53 +1,54 @@
-const Slash = require("./lib/Slash.js")
-const fs = require("fs")
+const Slash = require('./lib/Slash.js')
+const fs = require('fs')
 
-const { clientId, guildId } = require("../config.json")
+const { clientId, guildId } = require('../config.json')
 
-require("dotenv").config()
+require('dotenv').config()
 
 const slash = new Slash(clientId, guildId, process.env.TOKEN)
 
 // load command
-const commandFolders = fs.readdirSync("./src/commands")
+const commandFolders = fs.readdirSync('./src/commands')
 
 if (process.argv.length <= 2) {
-    for (const folder of commandFolders) {
-        const commandFiles = fs
-            .readdirSync(`./src/commands/${folder}`)
-            .filter((file) => file.endsWith(".js"))
-        for (const file of commandFiles) {
-            const command = require(`../src/commands/${folder}/${file}`)
+  for (const folder of commandFolders) {
+    const commandFiles = fs
+      .readdirSync(`./src/commands/${folder}`)
+      .filter((file) => file.endsWith('.js'))
+    for (const file of commandFiles) {
+      const command = require(`../src/commands/${folder}/${file}`)
 
-            if (command.slash) {
-                slash.command(command.slash.registerData)
+      if (command.slash) {
+        slash.command(command.slash.registerData)
 
-                console.log(`[Registered]: ${command.name}`)
-            }
-        }
+        console.log(`[Registered]: ${command.name}`)
+      }
     }
+  }
 } else {
-    // deep copy
-    var reloadCommand = JSON.parse(JSON.stringify(process.argv))
+  // deep copy
+  var reloadCommand = JSON.parse(JSON.stringify(process.argv))
 
-    reloadCommand.shift()
-    reloadCommand.shift()
+  // shift to third args
+  reloadCommand.shift()
+  reloadCommand.shift()
 
-    reloadCommand = reloadCommand.map((e) => e + ".js")
+  reloadCommand = reloadCommand.map((e) => e + '.js')
 
-    for (const folder of commandFolders) {
-        const commandFiles = fs
-            .readdirSync(`./src/commands/${folder}`)
-            .filter((file) => file.endsWith(".js"))
-        for (const file of commandFiles) {
-            if (reloadCommand.includes(file)) {
-                const command = require(`../src/commands/${folder}/${file}`)
+  for (const folder of commandFolders) {
+    const commandFiles = fs
+      .readdirSync(`./src/commands/${folder}`)
+      .filter((file) => file.endsWith('.js'))
+    for (const file of commandFiles) {
+      if (reloadCommand.includes(file)) {
+        const command = require(`../src/commands/${folder}/${file}`)
 
-                if (command.slash) {
-                    slash.command(command.slash.registerData)
+        if (command.slash) {
+          slash.command(command.slash.registerData)
 
-                    console.log(`[Registered]: ${command.name}`)
-                }
-            }
+          console.log(`[Registered]: ${command.name}`)
         }
+      }
     }
+  }
 }

@@ -1,81 +1,86 @@
-const Discord = require("discord.js")
-const fs = require("fs")
-const InterationManager = require("../lib/InteractionManager.js")
-const InteractionManager = require("../lib/InteractionManager.js")
+const Discord = require('discord.js')
+const fs = require('fs')
+const InterationManager = require('../lib/InteractionManager.js')
+const InteractionManager = require('../lib/InteractionManager.js')
+const { prefix } = require('../../config.json')
 
 module.exports = {
-    name: "INTERACTION_CREATE",
-    type: "ws",
-    async: true,
-    execute: async (interaction, _, client) => {
-        const IM = InteractionManager(interaction, client)
+  name: 'INTERACTION_CREATE',
+  type: 'ws',
+  execute: async (interaction, _, client) => {
+    const IM = InteractionManager(interaction, client)
 
-        const commandName = interaction.data.name
+    const commandName = interaction.data.name
 
-        const command =
-            client.commands.get(commandName) ||
-            client.commands.find(
-                (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
-            )
+    const command =
+      client.commands.get(commandName) ||
+      client.commands.find(
+        (cmd) => cmd.aliases && cmd.aliases.includes(commandName),
+      )
 
-        // check if command exist
-        if (!command) return
+    // check if command exist
+    if (!command) return
 
-        //check argument
-        if (command.args && !args.length) {
-            let reply = `You didn't provide any arguments, <@${interaction.member.user.id}>!`
+    //check argument
+    if (command.args && !args.length) {
+      let reply = `You didn't provide any arguments, <@${interaction.member.user.id}>!`
 
-            if (command.usage) {
-                reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
-            }
+      if (command.usage) {
+        reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
+      }
 
-            return IM.reply(reply)
-        }
+      return IM.reply(reply)
+    }
 
-        // check cooldown
-        const { cooldowns } = client
+    // check cooldown
+    const { cooldowns } = client
 
-        if (!cooldowns.has(command.name)) {
-            cooldowns.set(command.name, new Discord.Collection())
-        }
+    if (!cooldowns.has(command.name)) {
+      cooldowns.set(command.name, new Discord.Collection())
+    }
 
-        const now = Date.now()
-        const timestamps = cooldowns.get(command.name)
-        const cooldownAmount = (command.cooldown || 3) * 1000
-        const UserId = interaction.member.user.id
+    const now = Date.now()
+    const timestamps = cooldowns.get(command.name)
+    const cooldownAmount = (command.cooldown || 3) * 1000
+    const UserId = interaction.member.user.id
 
-        if (timestamps.has()) {
-            const expirationTime = timestamps.get(UserId) + cooldownAmount
+    if (timestamps.has()) {
+      const expirationTime = timestamps.get(UserId) + cooldownAmount
 
-            if (now < expirationTime) {
-                const timeLeft = (expirationTime - now) / 1000
-                reply = `Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`
+      if (now < expirationTime) {
+        const timeLeft = (expirationTime - now) / 1000
+        const reply = `Please wait ${timeLeft.toFixed(
+          1,
+        )} more second(s) before reusing the \`${command.name}\` command.`
 
-                IM.reply(reply)
-            }
-        }
+        IM.reply(reply)
+      }
+    }
 
-        timestamps.set(UserId, now)
-        setTimeout(() => timestamps.delete(UserId), cooldownAmount)
+    timestamps.set(UserId, now)
+    setTimeout(() => timestamps.delete(UserId), cooldownAmount)
 
-        const args =
-            "options" in interaction.data
-                ? interaction.data.options.map((e) => e.value)
-                : []
+    const args =
+      'options' in interaction.data
+        ? interaction.data.options.map((e) => e.value)
+        : []
 
-        try {
-            command.execute({
-                type: 1,
-                send: IM.reply,
-                guild_id: interaction.guild_id,
-                member_id: interaction.member.user.id,
-                client,
-                args,
-                interaction,
-            })
-        } catch (error) {
-            console.error(error)
-            IM.reply("Error")
-        }
-    },
+    const guild = await client.guilds.fetch(interaction.guild_id)
+    const guildMember = guild.members.cache.get(UserId)
+
+    try {
+      command.execute({
+        type: 1,
+        send: IM.reply,
+        client,
+        guildMember,
+        guild,
+        args,
+        interaction,
+      })
+    } catch (error) {
+      console.error(error)
+      IM.reply('Error')
+    }
+  },
 }
