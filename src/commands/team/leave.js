@@ -3,14 +3,24 @@ module.exports = {
   description: 'leave your team',
   usage: 'leave',
   aliases: ['leaveteam'],
-  async execute({ send, client, guildMember, guild }) {
+  guildOnly: true,
+  slash: {
+    registerData: {
+      guildOnly: true,
+      data: {
+        name: 'leave',
+        description: 'leave your team',
+      },
+    },
+  },
+  async execute({ send, guildMember, guild }) {
     const teamRole = guildMember.roles.cache.find((r) =>
       r.name.startsWith('Team'),
     )
     if (teamRole) {
       await guildMember.roles.remove(teamRole)
       const role = await guild.roles.fetch(teamRole.id)
-      send(`You left ${teamRole}`)
+      send(`${guildMember} left ${teamRole}`)
       if (role.members.size === 0) {
         return send(`${teamRole} now has no one`)
       } else {
@@ -19,6 +29,6 @@ module.exports = {
         )
       }
     }
-    return send(`You don't have a team, {$member}.`)
+    return send(`You don't have a team, ${guildMember}.`)
   },
 }

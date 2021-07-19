@@ -3,13 +3,48 @@ module.exports = {
   description: 'add member to team',
   usage: 'add [user]',
   aliases: ['addteam', 'teamadd'],
-  async execute({ send, guild, guildMember, message }) {
+  guildOnly: true,
+  slash: {
+    registerData: {
+      guildOnly: true,
+      data: {
+        name: 'add',
+        description:
+          'add member / create team / submit with no member to create team',
+        options: [
+          {
+            name: 'member_1',
+            description: 'Member to add',
+            type: 6,
+            required: false,
+          },
+          {
+            name: 'member_2',
+            description: 'Member to add',
+            type: 6,
+            required: false,
+          },
+          {
+            name: 'member_3',
+            description: 'Member to add',
+            type: 6,
+            required: false,
+          },
+          {
+            name: 'member_4',
+            description: 'Member to add',
+            type: 6,
+            required: false,
+          },
+        ],
+      },
+    },
+  },
+  async execute({ send, guild, guildMember, mentions }) {
     const allRoles = [...guild.roles.cache.values()]
     const participantRole = allRoles.find((r) => r.name == 'Participant')
     const allParticipants = [...participantRole.members.values()]
-    const mentionedParticipants = allParticipants.filter((m) => {
-      return message.mentions.users.has(m.id) // && m.id !== message.author.id
-    })
+    const mentionedParticipants = mentions.users
 
     // check if sender have participant role
     if (!participantRole.members.has(guildMember.id)) {
@@ -21,7 +56,7 @@ module.exports = {
       return m.roles.cache.has(participantRole.id)
     })
 
-    if (message.mentions.users.size !== RealParticipants.length) {
+    if (mentions.users.length !== RealParticipants.length) {
       return send("Some of your member doesn't have participant role.")
     }
 
@@ -30,9 +65,9 @@ module.exports = {
       return !m.roles.cache.some((r) => r.name.startsWith('Team'))
     })
 
-    if (message.mentions.users.size !== allowedParticipants.length) {
+    if (mentions.users.length !== allowedParticipants.length) {
       return send(
-        'Some of your member already have team. Please do `stupid leave` first',
+        'Some of your member already have team. Please do `stp leave` first',
       )
     }
 

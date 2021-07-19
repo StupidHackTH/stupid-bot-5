@@ -102,6 +102,27 @@ module.exports = {
 
     const guildMember = message.guild.members.cache.get(message.author.id)
 
+    let mentions = {
+      users: [],
+      channels: [],
+      roles: [],
+    }
+
+    console.log(message.mentions.user)
+
+    // change from user to guildmember
+    ;[...message.mentions.users.values()].forEach((e) =>
+      mentions.users.push(message.guild.members.cache.get(e.id)),
+    )
+    ;[...message.mentions.channels.values()].forEach((e) =>
+      mentions.channels.push(message.guild.channels.cache.get(e.id)),
+    )
+    ;[...message.mentions.roles.values()].forEach((e) =>
+      mentions.roles.push(message.guild.roles.cache.get(e.id)),
+    )
+
+    console.log(mentions)
+
     try {
       command.execute({
         type: 0,
@@ -111,6 +132,7 @@ module.exports = {
         member: message.author,
         guildMember,
         message,
+        mentions,
         args,
       })
     } catch (error) {

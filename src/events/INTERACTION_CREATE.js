@@ -10,7 +10,7 @@ module.exports = {
   execute: async (interaction, _, client) => {
     const adminIds = ['249515667252838421']
 
-    const IM = InteractionManager(interaction, client)
+    const IM = await InteractionManager(interaction, client)
 
     const commandName = interaction.data.name
 
@@ -68,24 +68,15 @@ module.exports = {
     timestamps.set(UserId, now)
     setTimeout(() => timestamps.delete(UserId), cooldownAmount)
 
-    const args =
-      'options' in interaction.data
-        ? interaction.data.options.map((e) => e.value)
-        : []
-
-    const guild = await client.guilds.fetch(interaction.guild_id)
-    const guildMember = guild.members.cache.get(UserId)
-
-    console.log('sth enter')
-
     try {
       command.execute({
         type: 1,
         send: IM.reply,
         client,
-        guildMember,
-        guild,
-        args,
+        guildMember: IM.guildMember,
+        guild: IM.guild,
+        args: IM.args,
+        mentions: IM.mentions,
         interaction,
       })
     } catch (error) {
