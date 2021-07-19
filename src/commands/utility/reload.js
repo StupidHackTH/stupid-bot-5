@@ -3,6 +3,7 @@ const fs = require('fs')
 module.exports = {
   name: 'reload',
   description: 'Reloads a command',
+  adminOnly: true,
   slash: {
     registerData: {
       guildOnly: true,

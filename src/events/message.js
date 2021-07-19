@@ -54,15 +54,14 @@ module.exports = {
 
     if (!command) return
 
-    if (command.guildOnly && message.channel.type === 'dm') {
-      return message.reply("I can't execute that command inside DMs!")
+    if (command.adminOnly) {
+      if (!adminIds.includes(message.author.id)) {
+        return IM.reply('Unauthorized')
+      }
     }
 
-    if (command.permissions) {
-      const authorPerms = message.channel.permissionsFor(message.author)
-      if (!authorPerms || !authorPerms.has(command.permissions)) {
-        return message.reply('You can not do this!')
-      }
+    if (command.guildOnly && message.channel.type === 'dm') {
+      return message.reply("I can't execute that command inside DMs!")
     }
 
     if (command.args && !args.length) {

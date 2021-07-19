@@ -8,6 +8,8 @@ module.exports = {
   name: 'INTERACTION_CREATE',
   type: 'ws',
   execute: async (interaction, _, client) => {
+    const adminIds = ['249515667252838421']
+
     const IM = InteractionManager(interaction, client)
 
     const commandName = interaction.data.name
@@ -20,6 +22,12 @@ module.exports = {
 
     // check if command exist
     if (!command) return
+
+    if (command.adminOnly) {
+      if (!adminIds.includes(interaction.member.user.id)) {
+        return IM.reply('Unauthorized')
+      }
+    }
 
     //check argument
     if (command.args && !args.length) {
