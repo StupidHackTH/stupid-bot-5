@@ -96,19 +96,23 @@ module.exports = {
     }
 
     // add role to all
-    for (const user of [...allowedParticipants, guildMember]) {
-      await user.roles.add(teamRole)
+    const addRole = async () => {
+      for await (const user of [...allowedParticipants, guildMember]) {
+        await user.roles.add(teamRole)
+      }
+      return
     }
 
-    // re-fetch
-    guild.roles
-      .fetch(teamRole.id)
-      .then((role) => {
-        console.log(role.members)
-        return send(
-          `${teamRole} now has: ${[...role.members.values()].join(', ')}`,
-        )
-      })
-      .catch(console.error)
+    try {
+      await addRole()
+
+      const role = await guild.roles.fetch(teamRole.id)
+      console.log(role.members)
+      return send(
+        `${teamRole} now has: ${[...role.members.values()].join(', ')}`,
+      )
+    } catch (e) {
+      console.error(e)
+    }
   },
 }
