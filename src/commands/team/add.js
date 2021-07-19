@@ -3,7 +3,7 @@ module.exports = {
   description: 'add member to team',
   usage: 'add [user]',
   aliases: ['addteam', 'teamadd'],
-  async execute({ send, client, args, guild, guildMember, message }) {
+  async execute({ send, guild, guildMember, message }) {
     const allRoles = [...guild.roles.cache.values()]
     const participantRole = allRoles.find((r) => r.name == 'Participant')
     const allParticipants = [...participantRole.members.values()]
@@ -49,7 +49,6 @@ module.exports = {
       teamRole =
         availableRoles[Math.floor(Math.random() * availableRoles.length)]
     } else {
-      console.log('this guy already have team')
       if (allowedParticipants.length === 0) {
         return send('You already have team.')
       }

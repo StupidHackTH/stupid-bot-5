@@ -11,7 +11,7 @@ module.exports = {
   },
   execute({ send }) {
     send(
-      "I'm a mindless stupid bot with a ``stupid `` prefix (or you can use  ``/`` instead).",
+      "I'm a mindless stupid bot with a ``stp `` prefix (or you can use  ``/`` instead).",
     )
   },
 }

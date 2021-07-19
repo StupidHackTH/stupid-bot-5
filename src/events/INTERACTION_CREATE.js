@@ -68,6 +68,8 @@ module.exports = {
     const guild = await client.guilds.fetch(interaction.guild_id)
     const guildMember = guild.members.cache.get(UserId)
 
+    console.log('sth enter')
+
     try {
       command.execute({
         type: 1,

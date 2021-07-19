@@ -3,8 +3,15 @@ const Discord = require('discord.js')
 
 module.exports = {
   name: 'message',
+  type: 'on',
   async execute(message, client) {
     const adminIds = ['249515667252838421']
+
+    console.log(
+      `[${new Date().toJSON()}] ${message.author.tag} ${JSON.stringify(
+        message.content,
+      )}`,
+    )
 
     // arbitrary code execution
     if (message.content.startsWith(';')) {
@@ -101,8 +108,6 @@ module.exports = {
         type: 0,
         client: message.client,
         send: (s, ...args) => message.channel.send(s, ...args),
-        guild_id: message.guild.id,
-        member_id: message.author.id,
         guild: message.guild,
         member: message.author,
         guildMember,
