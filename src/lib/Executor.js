@@ -8,7 +8,7 @@ async function Executor(commandName, context) {
 
   const adminIds = ['249515667252838421']
 
-  const send = context.send
+  const { channel, client, send, guildMember } = context.send
 
   const channelReg = new RegExp('bot')
 
@@ -21,17 +21,18 @@ async function Executor(commandName, context) {
   if (!command) return
 
   // bot room only
-  if (botChannelFilter && !channelReg.test(context.channel.name)) {
+  if (botChannelFilter && !channelReg.test(channel.name)) {
     return send('command can only be used in bot room')
   }
 
+  // admin Only Command
   if (command.adminOnly) {
-    if (!adminIds.includes(context.guildMember.id)) {
+    if (!adminIds.includes(guildMember.id)) {
       return message.reply('Unauthorized')
     }
   }
 
-  if (command.guildOnly && context.channel.type === 'dm') {
+  if (command.guildOnly && channel.type === 'dm') {
     return send("I can't execute that command inside DMs!")
   }
 
@@ -45,7 +46,7 @@ async function Executor(commandName, context) {
     return send(reply)
   }
 
-  const { cooldowns } = context.client
+  const { cooldowns } = client
 
   if (!cooldowns.has(command.name)) {
     cooldowns.set(command.name, new Discord.Collection())
@@ -55,7 +56,7 @@ async function Executor(commandName, context) {
   const timestamps = cooldowns.get(command.name)
   const cooldownAmount = (command.cooldown || 3) * 1000
 
-  if (timestamps.has(context.guildMember.id)) {
+  if (timestamps.has(guildMember.id)) {
     const expirationTime = timestamps.get(message.author.id) + cooldownAmount
 
     if (now < expirationTime) {
@@ -68,8 +69,8 @@ async function Executor(commandName, context) {
     }
   }
 
-  timestamps.set(context.guildMember.id, now)
-  setTimeout(() => timestamps.delete(context.guildMember.id), cooldownAmount)
+  timestamps.set(guildMember.id, now)
+  setTimeout(() => timestamps.delete(guildMember.id), cooldownAmount)
 
   try {
     command.execute(context)

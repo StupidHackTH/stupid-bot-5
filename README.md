@@ -12,5 +12,5 @@ https://discordjs.guide/
 - Slashcommand
 - list
 - name
-- member
+- ~~member~~
 - strip team (team03 team04 team 12 -> team00 team01 team 02)
