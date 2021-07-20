@@ -1,20 +1,11 @@
-const { prefix, botChannelFilter } = require('../../config.json')
+const { prefix } = require('../../config.json')
 const Discord = require('discord.js')
+const Executor = require('../lib/Executor.js')
 
 module.exports = {
   name: 'message',
   type: 'on',
   async execute(message, client) {
-    const channelReg = new RegExp('bot')
-
-    if (message.author.bot) return
-
-    if (botChannelFilter && !channelReg.test(message.channel.name)) {
-      message.reply('command can only be used in bot room')
-    }
-
-    const adminIds = ['249515667252838421']
-
     console.log(
       `[${new Date().toJSON()}] ${message.author.tag} ${JSON.stringify(
         message.content,
@@ -48,66 +39,10 @@ module.exports = {
       }
       return
     }
-    // detect command
-    if (!message.content.startsWith(prefix) || message.author.bot) return
 
+    // parse context to Executor
     const args = message.content.slice(prefix.length).trim().split(/ +/)
     const commandName = args.shift().toLowerCase()
-
-    const command =
-      client.commands.get(commandName) ||
-      client.commands.find(
-        (cmd) => cmd.aliases && cmd.aliases.includes(commandName),
-      )
-
-    if (!command) return
-
-    if (command.adminOnly) {
-      if (!adminIds.includes(message.author.id)) {
-        return message.reply('Unauthorized')
-      }
-    }
-
-    if (command.guildOnly && message.channel.type === 'dm') {
-      return message.reply("I can't execute that command inside DMs!")
-    }
-
-    if (command.args && !args.length) {
-      let reply = `You didn't provide any arguments, ${message.author}!`
-
-      if (command.usage) {
-        reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
-      }
-
-      return message.channel.send(reply)
-    }
-
-    const { cooldowns } = client
-
-    if (!cooldowns.has(command.name)) {
-      cooldowns.set(command.name, new Discord.Collection())
-    }
-
-    const now = Date.now()
-    const timestamps = cooldowns.get(command.name)
-    const cooldownAmount = (command.cooldown || 3) * 1000
-
-    if (timestamps.has(message.author.id)) {
-      const expirationTime = timestamps.get(message.author.id) + cooldownAmount
-
-      if (now < expirationTime) {
-        const timeLeft = (expirationTime - now) / 1000
-        return message.reply(
-          `Please wait ${timeLeft.toFixed(
-            1,
-          )} more second(s) before reusing the \`${command.name}\` command.`,
-        )
-      }
-    }
-
-    timestamps.set(message.author.id, now)
-    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
-
     const guildMember = message.guild.members.cache.get(message.author.id)
 
     let mentions = {
@@ -115,9 +50,6 @@ module.exports = {
       channels: [],
       roles: [],
     }
-
-    console.log(message.mentions.user)
-
     // change from user to guildmember
     ;[...message.mentions.users.values()].forEach((e) =>
       mentions.users.push(message.guild.members.cache.get(e.id)),
@@ -129,10 +61,8 @@ module.exports = {
       mentions.roles.push(message.guild.roles.cache.get(e.id)),
     )
 
-    console.log(mentions)
-
     try {
-      command.execute({
+      await Executor(commandName, {
         type: 0,
         client: message.client,
         send: (s, ...args) => message.channel.send(s, ...args),
@@ -140,13 +70,12 @@ module.exports = {
         member: message.author,
         channel: message.channel,
         guildMember,
-        message,
         mentions,
         args,
+        message,
       })
-    } catch (error) {
-      console.error(error)
-      message.reply('There was an error trying to execute that command!')
+    } catch (e) {
+      console.error(e)
     }
   },
 }

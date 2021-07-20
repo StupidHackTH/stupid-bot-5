@@ -24,8 +24,6 @@ async function InterationManager(interaction, client) {
     roles: [],
   }
 
-  console.log(interaction.data.options)
-
   interaction.data?.options?.forEach((e) => {
     switch (e.type) {
       case 6:

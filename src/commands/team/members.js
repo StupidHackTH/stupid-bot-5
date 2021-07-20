@@ -28,8 +28,6 @@ module.exports = {
 
     let teamRole = undefined
 
-    console.log(mentions)
-
     if (mentions.roles.length > 0) {
       ;[teamRole] = mentions.roles
     } else {
