@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const fs = require('fs')
 const InterationManager = require('../lib/InteractionManager.js')
 const InteractionManager = require('../lib/InteractionManager.js')
-const { prefix } = require('../../config.json')
+const { prefix, botChannelFilter } = require('../../config.json')
 
 module.exports = {
   name: 'INTERACTION_CREATE',
@@ -11,6 +11,14 @@ module.exports = {
     const adminIds = ['249515667252838421']
 
     const IM = await InteractionManager(interaction, client)
+
+    if (IM.guildMember.bot) return
+
+    const channelReg = new RegExp('bot')
+
+    if (botChannelFilter && !channelReg.test(IM.channel.name)) {
+      IM.reply('command can only be used in bot room')
+    }
 
     const commandName = interaction.data.name
 
@@ -77,6 +85,7 @@ module.exports = {
         guild: IM.guild,
         args: IM.args,
         mentions: IM.mentions,
+        channel: IM.channel,
         interaction,
       })
     } catch (error) {

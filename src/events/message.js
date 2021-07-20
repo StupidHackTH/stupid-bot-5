@@ -1,10 +1,18 @@
-const { prefix } = require('../../config.json')
+const { prefix, botChannelFilter } = require('../../config.json')
 const Discord = require('discord.js')
 
 module.exports = {
   name: 'message',
   type: 'on',
   async execute(message, client) {
+    const channelReg = new RegExp('bot')
+
+    if (message.author.bot) return
+
+    if (botChannelFilter && !channelReg.test(message.channel.name)) {
+      message.reply('command can only be used in bot room')
+    }
+
     const adminIds = ['249515667252838421']
 
     console.log(
@@ -56,7 +64,7 @@ module.exports = {
 
     if (command.adminOnly) {
       if (!adminIds.includes(message.author.id)) {
-        return IM.reply('Unauthorized')
+        return message.reply('Unauthorized')
       }
     }
 
@@ -130,6 +138,7 @@ module.exports = {
         send: (s, ...args) => message.channel.send(s, ...args),
         guild: message.guild,
         member: message.author,
+        channel: message.channel,
         guildMember,
         message,
         mentions,
