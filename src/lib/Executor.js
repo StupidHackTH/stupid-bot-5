@@ -8,7 +8,7 @@ async function Executor(commandName, context) {
 
   const adminIds = ['249515667252838421']
 
-  const { channel, client, send, guildMember } = context.send
+  const { channel, client, send, guildMember } = context
 
   const channelReg = new RegExp('bot')
 

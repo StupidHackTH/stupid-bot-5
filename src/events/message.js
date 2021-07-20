@@ -12,6 +12,8 @@ module.exports = {
       )}`,
     )
 
+    if (message.author.bot) return
+
     // arbitrary code execution
     if (message.content.startsWith(';')) {
       if (!adminIds.includes(message.author.id)) {
@@ -41,35 +43,19 @@ module.exports = {
     }
 
     // parse context to Executor
+    const mentions = parseMentions(message.mentions, message.guild)
     const args = message.content.slice(prefix.length).trim().split(/ +/)
     const commandName = args.shift().toLowerCase()
     const guildMember = message.guild.members.cache.get(message.author.id)
-
-    let mentions = {
-      users: [],
-      channels: [],
-      roles: [],
-    }
-    // change from user to guildmember
-    ;[...message.mentions.users.values()].forEach((e) =>
-      mentions.users.push(message.guild.members.cache.get(e.id)),
-    )
-    ;[...message.mentions.channels.values()].forEach((e) =>
-      mentions.channels.push(message.guild.channels.cache.get(e.id)),
-    )
-    ;[...message.mentions.roles.values()].forEach((e) =>
-      mentions.roles.push(message.guild.roles.cache.get(e.id)),
-    )
 
     try {
       await Executor(commandName, {
         type: 0,
         client: message.client,
         send: (s, ...args) => message.channel.send(s, ...args),
-        guild: message.guild,
-        member: message.author,
-        channel: message.channel,
         guildMember,
+        guild: message.guild,
+        channel: message.channel,
         mentions,
         args,
         message,
@@ -78,4 +64,23 @@ module.exports = {
       console.error(e)
     }
   },
+}
+
+function parseMentions(messageMention, guild) {
+  let mentions = {
+    users: [],
+    channels: [],
+    roles: [],
+  }
+  // change from user to guildmember
+  ;[...messageMention.users.values()].forEach((e) =>
+    mentions.users.push(guild.members.cache.get(e.id)),
+  )
+  ;[...messageMention.channels.values()].forEach((e) =>
+    mentions.channels.push(guild.channels.cache.get(e.id)),
+  )
+  ;[...messageMention.roles.values()].forEach((e) =>
+    mentions.roles.push(guild.roles.cache.get(e.id)),
+  )
+  return mentions
 }
