@@ -1,8 +1,10 @@
+const { prefix } = require('../../../config.json')
+
 module.exports = {
   name: 'bot',
   slash: {
     registerData: {
-      guildOnly: true,
+      guildOnly: false,
       data: {
         name: 'bot',
         description: 'Get bot info',
@@ -11,7 +13,7 @@ module.exports = {
   },
   execute({ send }) {
     send(
-      "I'm a mindless stupid bot with a ``stp `` prefix (or you can use  ``/`` instead).",
+      `I'm a mindless stupid bot with a \`\`${prefix} \`\` prefix (or you can use  \`\`/\`\` instead).`,
     )
   },
 }

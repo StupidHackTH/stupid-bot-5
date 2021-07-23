@@ -1,3 +1,5 @@
+const { prefix } = require('../../../config.json')
+
 module.exports = {
   name: 'add',
   description: 'add member to team',
@@ -48,27 +50,16 @@ module.exports = {
 
     // check if sender have participant role
     if (!participantRole.members.has(guildMember.id)) {
-      return send("You don't have participant role.")
+      return send(
+        "You don't have participant role. try /verify if you have Eventpop reference code.",
+      )
     }
-
     // check if mentioned user have participant role
     const RealParticipants = mentionedParticipants.filter((m) => {
       return m.roles.cache.has(participantRole.id)
     })
-
     if (mentions.users.length !== RealParticipants.length) {
       return send("Some of your member doesn't have participant role.")
-    }
-
-    // check if mentioned user don't have team
-    const allowedParticipants = RealParticipants.filter((m) => {
-      return !m.roles.cache.some((r) => r.name.startsWith('Team'))
-    })
-
-    if (mentions.users.length !== allowedParticipants.length) {
-      return send(
-        'Some of your member already have team. Please do `stp leave` first',
-      )
     }
 
     // find team
@@ -84,7 +75,7 @@ module.exports = {
       teamRole =
         availableRoles[Math.floor(Math.random() * availableRoles.length)]
     } else {
-      if (allowedParticipants.length === 0) {
+      if (RealParticipants.length === 0) {
         return send('You already have team.')
       }
       teamRole = guildMember.roles.cache.find((r) => r.name.startsWith('Team'))
@@ -93,6 +84,19 @@ module.exports = {
     // no avaiable team left
     if (!teamRole) {
       return send('No team left')
+    }
+
+    // check if mentioned user don't have team
+    const allowedParticipants = RealParticipants.filter((m) => {
+      return !m.roles.cache.some(
+        (r) => r.name.startsWith('Team') && r.name !== teamRole.name,
+      )
+    })
+
+    if (mentions.users.length !== allowedParticipants.length) {
+      return send(
+        `Some of your member already have team. Please do \`\`${prefix}leave\`\` first`,
+      )
     }
 
     // add role to all

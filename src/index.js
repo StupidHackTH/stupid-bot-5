@@ -1,5 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
+const firebase = require('firebase')
 
 require('dotenv').config()
 
@@ -15,6 +16,36 @@ http
     res.end()
   })
   .listen(process.env.PORT || 80)
+
+var firebaseConfig = {
+  apiKey: 'AIzaSyAXOlKvl4dCdfNPs7-ESbwLA7918tHgG1k',
+  authDomain: 'stupid-reference-code.firebaseapp.com',
+  projectId: 'stupid-reference-code',
+  storageBucket: 'stupid-reference-code.appspot.com',
+  messagingSenderId: '749205312711',
+  appId: '1:749205312711:web:300b7bdd185a002e1a9ae2',
+  measurementId: 'G-5NCC8DLM1L',
+}
+
+// firebase setup
+firebase.initializeApp(firebaseConfig)
+firebase
+  .auth()
+  .signInWithEmailAndPassword(
+    ...process.env.AUDIENCE_APP_CREDENTIALS.split(':'),
+  )
+  .then(() => {
+    console.log(
+      'Authence app authenticated as',
+      firebase.auth().currentUser.uid,
+    )
+    client.database = firebase.firestore()
+    console.log('Link bot to database')
+  })
+  .catch((e) => {
+    console.log("Can't connect to database")
+    console.error(e)
+  })
 
 // load command
 const commandFolders = fs.readdirSync('./src/commands')

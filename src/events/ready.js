@@ -1,4 +1,5 @@
 const fs = require('fs')
+const firebase = require('firebase')
 
 module.exports = {
   name: 'ready',
