@@ -23,7 +23,7 @@ async function Executor(commandName, context) {
 
   // bot room only
   if (botChannelFilter && !channelReg.test(channel.name)) {
-    return send(Embed.Error("Executor", 'command can only be used in bot room'))
+    return send(Embed.Error('Executor', 'command can only be used in bot room'))
   }
 
   // admin Only Command
@@ -34,7 +34,9 @@ async function Executor(commandName, context) {
   }
 
   if (command.guildOnly && channel.type === 'dm') {
-    return send(Embed.Error("Executor", "I can't execute that command inside DMs!"))
+    return send(
+      Embed.Error('Executor', "I can't execute that command inside DMs!"),
+    )
   }
 
   if (command.args && !context.args.length) {
@@ -44,7 +46,7 @@ async function Executor(commandName, context) {
       reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
     }
 
-    return send(Embed.Error("Executor", reply))
+    return send(Embed.Error('Executor', reply))
   }
 
   const { cooldowns } = client
@@ -58,7 +60,7 @@ async function Executor(commandName, context) {
   const cooldownAmount = (command.cooldown || 3) * 1000
 
   if (timestamps.has(member.id)) {
-    const expirationTime = timestamps.get(message.author.id) + cooldownAmount
+    const expirationTime = timestamps.get(member.id) + cooldownAmount
 
     if (now < expirationTime) {
       const timeLeft = (expirationTime - now) / 1000
