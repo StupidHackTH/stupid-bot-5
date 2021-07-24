@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const { prefix, botChannelFilter } = require('../../config.json')
+const Embed = require('./Embed')
 
 module.exports = Executor
 
@@ -22,7 +23,7 @@ async function Executor(commandName, context) {
 
   // bot room only
   if (botChannelFilter && !channelReg.test(channel.name)) {
-    return send('command can only be used in bot room')
+    return send(Embed.Error("Executor", 'command can only be used in bot room'))
   }
 
   // admin Only Command
@@ -33,7 +34,7 @@ async function Executor(commandName, context) {
   }
 
   if (command.guildOnly && channel.type === 'dm') {
-    return send("I can't execute that command inside DMs!")
+    return send(Embed.Error("Executor", "I can't execute that command inside DMs!"))
   }
 
   if (command.args && !context.args.length) {
@@ -43,7 +44,7 @@ async function Executor(commandName, context) {
       reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
     }
 
-    return send(reply)
+    return send(Embed.Error("Executor", reply))
   }
 
   const { cooldowns } = client

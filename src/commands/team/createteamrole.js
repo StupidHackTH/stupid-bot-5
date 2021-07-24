@@ -1,3 +1,5 @@
+const Embed = require('../../lib/Embed')
+
 module.exports = {
   name: 'createteamrole',
   description: 'create team role',
@@ -11,6 +13,6 @@ module.exports = {
         reason: 'Command was invoked',
       })
     }
-    send(`Created ${args[0]} Team`)
+    send(Embed.SendSuccess("Create Team", `Created ${args[0]} Team`))
   },
 }

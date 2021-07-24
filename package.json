@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
     "register": "node tool/register.js",
-    "unregister": "node tool/unregister.js"
+    "unregister": "node tool/unregister.js",
+    "dev": "nodemon"
   },
   "author": "",
   "license": "ISC",
@@ -16,5 +17,8 @@
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "firebase": "^8.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }

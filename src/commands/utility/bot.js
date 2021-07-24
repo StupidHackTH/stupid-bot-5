@@ -1,4 +1,5 @@
 const { prefix } = require('../../../config.json')
+const Embed = require('../../lib/Embed')
 
 module.exports = {
   name: 'bot',
@@ -12,8 +13,9 @@ module.exports = {
     },
   },
   execute({ send }) {
-    send(
-      `I'm a mindless stupid bot with a \`\`${prefix} \`\` prefix (or you can use  \`\`/\`\` instead).`,
-    )
+    send(Embed.Embed(
+      "About",
+      `I'm a mindless stupid bot with a \`\`${prefix} \`\` prefix (or you can use  \`\`/\`\` instead).`
+    ))
   },
 }
