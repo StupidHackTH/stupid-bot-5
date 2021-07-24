@@ -25,7 +25,7 @@ const Embed = (title, description="", color="#7f03fc", fields=[]) => {
  * @param {string} description - The description of the embed
  */
 const SendError = (title="", description="") => {
-	return Embed(`Error${title ? `: ${title}` : ""}`, description, HexToDec("#f55742"))
+	return Embed(`Error${title ? `: ${title}` : ""}`, description, "#f55742")
 }
 
 /***
@@ -35,10 +35,11 @@ const SendError = (title="", description="") => {
  * @param {string} description - The description of the embed
  */
 const SendSuccess = (title="", description="") => {
-	return Embed(`Success${title ? `: ${title}` : ""}`, description, HexToDec("#4aff83"))
+	return Embed(`Success${title ? `: ${title}` : ""}`, description, "#4aff83")
 }
 
 const HexToDec = (hex) => {
+	console.log("dd", hex)
 	return parseInt(hex.split("").filter((s) => s !== "#").join(""), 16)
 }
 

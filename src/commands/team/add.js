@@ -93,9 +93,9 @@ module.exports = {
     })
 
     if (mentions.users.length !== allowedParticipants.length) {
-      return send(SendError(
+      return send(Embed.SendError(
         "Add to Team",
-        `Some of your member already a have team. Please do \`\`${prefix}leave\`\` first`,
+        `Some of your members already a have team. Please do \`\`${prefix}leave\`\` first`,
       ))
     }
 
