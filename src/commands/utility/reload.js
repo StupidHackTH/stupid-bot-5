@@ -1,4 +1,5 @@
 const fs = require('fs')
+const Embed = require('../../lib/Embed')
 
 module.exports = {
   name: 'reload',
@@ -30,9 +31,10 @@ module.exports = {
       )
 
     if (!command) {
-      return send(
+      return send(Embed.SendError(
+        'Reload',
         `There is no command with name or alias \`${commandName}\`, ${message.author}!`,
-      )
+      ))
     }
 
     const commandFolders = fs.readdirSync('./src/commands')
@@ -48,9 +50,10 @@ module.exports = {
       send(`Command \`${newCommand.name}\` was reloaded!`)
     } catch (error) {
       console.error(error)
-      send(
+      send(Embed.SendError(
+        "Reload",
         `There was an error while reloading a command: \`${command.name}\`:\n\`${error.message}\``,
-      )
+      ))
     }
   },
 }

@@ -1,5 +1,3 @@
-const { MessageEmbed } = require("discord.js")
-
 /***
  * Returns a discord.js Embed
  * @constructor
