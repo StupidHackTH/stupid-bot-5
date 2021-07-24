@@ -37,7 +37,6 @@ const SendSuccess = (title = '', description = '') => {
 }
 
 const HexToDec = (hex) => {
-  console.log('dd', hex)
   return parseInt(
     hex
       .split('')
