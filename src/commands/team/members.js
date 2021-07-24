@@ -1,5 +1,7 @@
 // this command is named mbs because [me]mber will be auto-complete to /me command and it's annoying
 
+const { SendError } = require("../../lib/Embed")
+
 module.exports = {
   name: 'mbs',
   description: 'list current member of your team',
@@ -35,17 +37,19 @@ module.exports = {
     }
 
     if (!teamRole) {
-      return send("You don't have a team")
+      return send(SendError("List Members", "You don't have a team"))
     }
 
     if (teamRole.members.size === 0) {
-      return send(`${teamRole} has no one.`)
+      return send(SendSuccess("List Members", `${teamRole} has no one.`))
     }
 
     send(
-      `${teamRole} has: ${[...teamRole.members.values()]
-        .map((e) => e.nickname || e.displayName)
-        .join(', ')}`,
-    )
+      SendSuccess(
+        "List Members",
+        `${teamRole} has: ${[...teamRole.members.values()]
+          .map((e) => e.nickname || e.displayName)
+          .join(', ')}`,
+    ))
   },
 }

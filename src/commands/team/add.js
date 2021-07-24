@@ -1,3 +1,5 @@
+const Embed = require('../../lib/Embed')
+
 module.exports = {
   name: 'add',
   description: 'add member to team',
@@ -48,7 +50,7 @@ module.exports = {
 
     // check if sender have participant role
     if (!participantRole.members.has(guildMember.id)) {
-      return send("You don't have participant role.")
+      return send(Embed.SendError("Add to Team", "You don't a have participant role."))
     }
 
     // check if mentioned user have participant role
@@ -57,7 +59,7 @@ module.exports = {
     })
 
     if (mentions.users.length !== RealParticipants.length) {
-      return send("Some of your member doesn't have participant role.")
+      return send(Embed.SendError("Add to Team", "Some members don't have a participant role. Verify their tickets first."))
     }
 
     // check if mentioned user don't have team
@@ -66,9 +68,7 @@ module.exports = {
     })
 
     if (mentions.users.length !== allowedParticipants.length) {
-      return send(
-        'Some of your member already have team. Please do `stp leave` first',
-      )
+      return send(Embed.SendError("Add to Team", "Some members already have a team. Type `stp leave` to leave your old team first."))
     }
 
     // find team
@@ -77,7 +77,7 @@ module.exports = {
     // sender don't have team
     if (!guildMember.roles.cache.some((e) => e.name.startsWith('Team'))) {
       // create team for sender
-      console.log('this guy dont have team')
+      console.log('this guy dont have team lol')
       const availableRoles = allRoles.filter(
         (r) => r.members.size === 0 && r.name.startsWith('Team'),
       )
@@ -85,14 +85,14 @@ module.exports = {
         availableRoles[Math.floor(Math.random() * availableRoles.length)]
     } else {
       if (allowedParticipants.length === 0) {
-        return send('You already have team.')
+        return send(Embed.SendError("Add to Team", 'You already a have team.'))
       }
       teamRole = guildMember.roles.cache.find((r) => r.name.startsWith('Team'))
     }
 
     // no avaiable team left
     if (!teamRole) {
-      return send('No team left')
+      return send(Embed.SendError("Add to Team", 'No avialable team left ;('))
     }
 
     // add role to all
@@ -108,9 +108,10 @@ module.exports = {
 
       const role = await guild.roles.fetch(teamRole.id)
       console.log(role.members)
-      return send(
+      return send(Embed.SendError(
+        "Add to Team",
         `${teamRole} now has: ${[...role.members.values()].join(', ')}`,
-      )
+      ))
     } catch (e) {
       console.error(e)
     }

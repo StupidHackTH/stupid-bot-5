@@ -1,3 +1,5 @@
+const { SendSuccess, SendError } = require("../../lib/Embed")
+
 module.exports = {
   name: 'remteam',
   description: 'reset all team',
@@ -6,13 +8,13 @@ module.exports = {
   guildOnly: true,
   async execute({ send, guild, args, message }) {
     if (args.length === 0) {
-      return send('remteam regex/ [team] [team] ...')
+      return send(SendError("Remove", 'remteam regex/ [team] [team] ...'))
     }
     if (message.mentions.roles.size > 0) {
       message.mentions.roles.forEach(async (r) => {
         r.delete('The command was invoked')
       })
-      send('Removed mentioned team')
+      send(SendSuccess("Remove", 'Removed mentioned team'))
     } else {
       const reg = new RegExp(args[0])
       console.log(reg)
@@ -23,7 +25,7 @@ module.exports = {
           r.delete('The command was invoked')
           count += 1
         })
-      send(`Removed ${count} team`)
+      send(SendSuccess("Remove", `Removed ${count} team`))
     }
   },
 }

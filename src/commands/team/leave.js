@@ -1,3 +1,5 @@
+const Embed = require('../../lib/Embed')
+
 module.exports = {
   name: 'leave',
   description: 'leave your team',
@@ -22,13 +24,14 @@ module.exports = {
       const role = await guild.roles.fetch(teamRole.id)
       send(`${guildMember} left ${teamRole}`)
       if (role.members.size === 0) {
-        return send(`${teamRole} now has no one`)
+        return send(Embed.SendSuccess("Leave Team", `${teamRole} now has no one`))
       } else {
-        return send(
+        return send(Embed.SendSuccess(
+          "Leave Team",
           `${teamRole} now has: ${[...role.members.values()].join(', ')}`,
-        )
+        ))
       }
     }
-    return send(`You don't have a team, ${guildMember}.`)
+    return send(Embed.SendError("Leave Team", `You don't have a team, ${guildMember}.`))
   },
 }
