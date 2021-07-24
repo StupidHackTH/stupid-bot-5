@@ -1,4 +1,5 @@
 const Embed = require('../../lib/Embed')
+const updateTeamList = require('../../lib/updateTeam')
 
 module.exports = {
   name: 'leave',
@@ -15,23 +16,20 @@ module.exports = {
       },
     },
   },
-  async execute({ send, guildMember, guild }) {
+  async execute({ client, send, guildMember, guild }) {
     const teamRole = guildMember.roles.cache.find((r) =>
       r.name.startsWith('Team'),
     )
-    if (teamRole) {
-      await guildMember.roles.remove(teamRole)
-      const role = await guild.roles.fetch(teamRole.id)
-      send(`${guildMember} left ${teamRole}`)
-      if (role.members.size === 0) {
-        return send(Embed.SendSuccess("Leave Team", `${teamRole} now has no one`))
-      } else {
-        return send(Embed.SendSuccess(
-          "Leave Team",
-          `${teamRole} now has: ${[...role.members.values()].join(', ')}`,
-        ))
-      }
+    if (!teamRole) {
+      return send(
+        Embed.SendError('Leave Team', `You don't have a team, ${guildMember}.`),
+      )
     }
-    return send(Embed.SendError("Leave Team", `You don't have a team, ${guildMember}.`))
+
+    await guildMember.roles.remove(teamRole)
+
+    updateTeamList(guild)
+
+    send(Embed.SendSuccess('Leave Team successfully'))
   },
 }

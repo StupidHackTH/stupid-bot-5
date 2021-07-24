@@ -2,6 +2,7 @@
   "prefix": "stp ",
   "guildId": "866357715566460958",
   "clientId": "859496133562073109",
+  "teamChannelId": "868461848398278716",
   "publicKey": "fcc3a0170458d88e0efe714528104b0e20104021d2218a9028f87d6859ca73b8",
   "botChannelFilter": true
 }
