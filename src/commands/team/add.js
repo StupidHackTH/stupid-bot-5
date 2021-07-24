@@ -1,4 +1,5 @@
 const Embed = require('../../lib/Embed')
+const { prefix } = require('../../../config.json')
 
 module.exports = {
   name: 'add',
@@ -50,25 +51,14 @@ module.exports = {
 
     // check if sender have participant role
     if (!participantRole.members.has(guildMember.id)) {
-      return send(Embed.SendError("Add to Team", "You don't a have participant role."))
+      return send(Embed.SendError("Add to Team", "You don't a have participant role. Try /verify if you have Eventpop reference code."))
     }
-
     // check if mentioned user have participant role
     const RealParticipants = mentionedParticipants.filter((m) => {
       return m.roles.cache.has(participantRole.id)
     })
-
     if (mentions.users.length !== RealParticipants.length) {
       return send(Embed.SendError("Add to Team", "Some members don't have a participant role. Verify their tickets first."))
-    }
-
-    // check if mentioned user don't have team
-    const allowedParticipants = RealParticipants.filter((m) => {
-      return !m.roles.cache.some((r) => r.name.startsWith('Team'))
-    })
-
-    if (mentions.users.length !== allowedParticipants.length) {
-      return send(Embed.SendError("Add to Team", "Some members already have a team. Type `stp leave` to leave your old team first."))
     }
 
     // find team
@@ -84,7 +74,7 @@ module.exports = {
       teamRole =
         availableRoles[Math.floor(Math.random() * availableRoles.length)]
     } else {
-      if (allowedParticipants.length === 0) {
+      if (RealParticipants.length === 0) {
         return send(Embed.SendError("Add to Team", 'You already a have team.'))
       }
       teamRole = guildMember.roles.cache.find((r) => r.name.startsWith('Team'))
@@ -93,6 +83,20 @@ module.exports = {
     // no avaiable team left
     if (!teamRole) {
       return send(Embed.SendError("Add to Team", 'No avialable team left ;('))
+    }
+
+    // check if mentioned user don't have team
+    const allowedParticipants = RealParticipants.filter((m) => {
+      return !m.roles.cache.some(
+        (r) => r.name.startsWith('Team') && r.name !== teamRole.name,
+      )
+    })
+
+    if (mentions.users.length !== allowedParticipants.length) {
+      return send(SendError(
+        "Add to Team",
+        `Some of your member already a have team. Please do \`\`${prefix}leave\`\` first`,
+      ))
     }
 
     // add role to all

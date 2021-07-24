@@ -8,9 +8,11 @@ https://discordjs.guide/
 
 # TODO
 
+- ~~ticket verify~~
 - air table / firebase
 - Slashcommand
 - list
 - name
 - ~~member~~
 - strip team (team03 team04 team 12 -> team00 team01 team 02)
+- fixed race condition in add and verify

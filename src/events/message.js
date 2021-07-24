@@ -1,6 +1,7 @@
 const { prefix } = require('../../config.json')
 const Discord = require('discord.js')
 const Executor = require('../lib/Executor.js')
+const Authenticate = require('../lib/Authentication')
 
 module.exports = {
   name: 'message',
@@ -14,8 +15,8 @@ module.exports = {
 
     if (message.author.bot) return
 
-    // arbitrary code execution
     if (message.content.startsWith(';')) {
+      // arbitrary code execution
       if (!adminIds.includes(message.author.id)) {
         message.reply('Unauthorized')
         return
@@ -42,11 +43,20 @@ module.exports = {
       return
     }
 
+    // authenticate
+    if (
+      message.channel.type === 'dm' &&
+      message.content.match(/^#[0-9]{5}-[0-9]{7}$/i)
+    ) {
+      return await Authenticate(client, message.content, message)
+    }
+
+    if (!message.content.startsWith(prefix)) return
     // parse context to Executor
     const mentions = parseMentions(message.mentions, message.guild)
     const args = message.content.slice(prefix.length).trim().split(/ +/)
     const commandName = args.shift().toLowerCase()
-    const guildMember = message.guild.members.cache.get(message.author.id)
+    const guildMember = message.guild?.members.cache.get(message.author.id)
 
     try {
       await Executor(commandName, {
@@ -56,6 +66,7 @@ module.exports = {
         guildMember,
         guild: message.guild,
         channel: message.channel,
+        member: message.author,
         mentions,
         args,
         message,

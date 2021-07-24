@@ -19,6 +19,7 @@ module.exports = {
         args: IM.args,
         mentions: IM.mentions,
         channel: IM.channel,
+        member: IM.guildMember.user,
         interaction,
       })
     } catch (e) {

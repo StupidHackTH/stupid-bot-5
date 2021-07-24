@@ -8,7 +8,7 @@ async function Executor(commandName, context) {
 
   const adminIds = ['249515667252838421']
 
-  const { channel, client, send, guildMember } = context
+  const { channel, client, send, member, args } = context
 
   const channelReg = new RegExp('bot')
 
@@ -27,7 +27,7 @@ async function Executor(commandName, context) {
 
   // admin Only Command
   if (command.adminOnly) {
-    if (!adminIds.includes(guildMember.id)) {
+    if (!adminIds.includes(member.id)) {
       return message.reply('Unauthorized')
     }
   }
@@ -36,8 +36,8 @@ async function Executor(commandName, context) {
     return send("I can't execute that command inside DMs!")
   }
 
-  if (command.args && !args.length) {
-    let reply = `You didn't provide any arguments, ${message.author}!`
+  if (command.args && !context.args.length) {
+    let reply = `You didn't provide any arguments, ${member}!`
 
     if (command.usage) {
       reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
@@ -56,7 +56,7 @@ async function Executor(commandName, context) {
   const timestamps = cooldowns.get(command.name)
   const cooldownAmount = (command.cooldown || 3) * 1000
 
-  if (timestamps.has(guildMember.id)) {
+  if (timestamps.has(member.id)) {
     const expirationTime = timestamps.get(message.author.id) + cooldownAmount
 
     if (now < expirationTime) {
@@ -69,8 +69,8 @@ async function Executor(commandName, context) {
     }
   }
 
-  timestamps.set(guildMember.id, now)
-  setTimeout(() => timestamps.delete(guildMember.id), cooldownAmount)
+  timestamps.set(member.id, now)
+  setTimeout(() => timestamps.delete(member.id), cooldownAmount)
 
   try {
     command.execute(context)
