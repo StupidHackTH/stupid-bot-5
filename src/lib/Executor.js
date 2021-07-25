@@ -5,7 +5,7 @@ const Embed = require('./Embed')
 module.exports = Executor
 
 async function Executor(commandName, context) {
-	if (context.guildMember.bot) return
+	console.log(`${context.member.username} call: ${commandName}`)
 
 	const adminIds = ['249515667252838421', '567046882321498113']
 
@@ -16,7 +16,7 @@ async function Executor(commandName, context) {
 	const command =
 		context.client.commands.get(commandName) ||
 		context.client.commands.find(
-			(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
+			(cmd) => cmd.aliases && cmd.aliases.includes(commandName)
 		)
 
 	if (!command) return
@@ -33,7 +33,7 @@ async function Executor(commandName, context) {
 
 	if (command.guildOnly && channel.type === 'dm') {
 		return send(
-			Embed.SendError('Executor', "I can't execute that command inside DMs!"),
+			Embed.SendError('Executor', "I can't execute that command inside DMs!")
 		)
 	}
 
@@ -64,8 +64,8 @@ async function Executor(commandName, context) {
 			const timeLeft = (expirationTime - now) / 1000
 			return send(
 				`Please wait ${timeLeft.toFixed(
-					1,
-				)} more second(s) before reusing the \`${command.name}\` command.`,
+					1
+				)} more second(s) before reusing the \`${command.name}\` command.`
 			)
 		}
 	}
@@ -80,8 +80,8 @@ async function Executor(commandName, context) {
 		send(
 			Embed.SendError(
 				'Executor',
-				'There was an error trying to execute that command!',
-			),
+				'There was an error trying to execute that command!'
+			)
 		)
 	}
 }

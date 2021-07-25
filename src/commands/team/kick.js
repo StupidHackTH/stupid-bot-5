@@ -13,8 +13,7 @@ module.exports = {
 			guildOnly: true,
 			data: {
 				name: 'remove',
-				description:
-					'remove members from the team',
+				description: 'remove members from the team',
 				options: [
 					{
 						name: 'member_1',
@@ -45,14 +44,17 @@ module.exports = {
 		},
 	},
 	async execute({ client, send, guild, guildMember, mentions }) {
-		if (mentions.users.length === 0) return send(Embed.SendError('Remove from Team', "Please mention at least one user."))
+		if (mentions.users.length === 0)
+			return send(
+				Embed.SendError('Remove from Team', 'Please mention at least one user.')
+			)
 
 		const allRoles = [...guild.roles.cache.values()]
 		const participantRole = allRoles.find((r) => r.name === 'Participant')
 
 		if (!participantRole)
 			return send(
-				Embed.SendError('Remove from Team', "idk there's no participants lol."),
+				Embed.SendError('Remove from Team', "idk there's no participants lol.")
 			)
 
 		const mentionedParticipants = mentions.users
@@ -60,7 +62,10 @@ module.exports = {
 		// check if sender have participant role
 		if (!participantRole.members.has(guildMember.id)) {
 			return send(
-				Embed.SendError('Remove from Team', "You don't a have participant role. Try /verify if you have an Eventpop reference code.")
+				Embed.SendError(
+					'Remove from Team',
+					"You don't a have participant role. Try /verify if you have an Eventpop reference code."
+				)
 			)
 		}
 		// check if mentioned user have participant role
@@ -70,7 +75,10 @@ module.exports = {
 
 		if (mentions.users.length !== RealParticipants.length) {
 			return send(
-				Embed.SendError('Remove from Team', "Some of the mentioned members don't have a participant role. They'll have to verify their tickets first.")
+				Embed.SendError(
+					'Remove from Team',
+					"Some of the mentioned members don't have a participant role. They'll have to verify their tickets first."
+				)
 			)
 		}
 
@@ -85,7 +93,8 @@ module.exports = {
 			teamRole = senderRole.find((r) => r.name.startsWith('Team'))
 		}
 
-		if (!teamRole) return send(Embed.SendError('Remove from Team', "Something went wrong."))
+		if (!teamRole)
+			return send(Embed.SendError('Remove from Team', 'Something went wrong.'))
 
 		// check if mentioned users are in this team
 		const allowedParticipants = RealParticipants.filter((m) => {
@@ -95,7 +104,12 @@ module.exports = {
 		})
 
 		if (allowedParticipants.length !== RealParticipants.length) {
-			return send(Embed.SendError('Remove from Team', `Some of the mentioned members aren't in this team.`))
+			return send(
+				Embed.SendError(
+					'Remove from Team',
+					`Some of the mentioned members aren't in this team.`
+				)
+			)
 		}
 
 		const oldData = await client.database
@@ -106,12 +120,18 @@ module.exports = {
 				if (snapshot.exists) return snapshot.data()
 				else return null
 			})
-			.catch((err) => console.error("Error fetching from database", err))
+			.catch((err) => console.error('Error fetching from database', err))
 
-		if (!oldData) return Embed.SendError('Remove from Team', "Can't find info about your team.")
+		if (!oldData)
+			return Embed.SendError(
+				'Remove from Team',
+				"Can't find info about your team."
+			)
 
 		if (!oldData.admins.includes(guildMember.id)) {
-			return send(Embed.SendError('Remove from Team', "You aren't authorized to do this."))
+			return send(
+				Embed.SendError('Remove from Team', "You aren't authorized to do this.")
+			)
 		}
 
 		// remove role to all
@@ -125,12 +145,14 @@ module.exports = {
 			await client.database
 				.collection('Teams')
 				.doc(teamRole.name)
-				.set(
-					{
-						members: oldData.members.filter((member) => !membersToRemove.includes(member)),
-						admins: oldData.admins.filter((admin) => !membersToRemove.includes(admin))
-					}
-				)
+				.update({
+					members: oldData.members.filter(
+						(member) => !membersToRemove.includes(member)
+					),
+					admins: oldData.admins.filter(
+						(admin) => !membersToRemove.includes(admin)
+					),
+				})
 				.then(() => {
 					console.log('Removed team from database')
 				})
@@ -142,7 +164,7 @@ module.exports = {
 		try {
 			await removeRole()
 
-			updateTeamList(guild)
+			updateTeamList(guild, client)
 
 			const teamColor = await client.database
 				.collection('Teams')
@@ -157,9 +179,15 @@ module.exports = {
 				})
 
 			const role = await guild.roles.fetch(teamRole.id)
-			return send(Embed.Embed('Remove from Team',`${teamRole} now has: ${[...role.members.values()].join(', ')}`,teamColor || '#fcd200'))
+			return send(
+				Embed.Embed(
+					'Remove from Team',
+					`${teamRole} now has: ${[...role.members.values()].join(', ')}`,
+					teamColor || '#fcd200'
+				)
+			)
 		} catch (e) {
-			updateTeamList(guild)
+			updateTeamList(guild, client)
 
 			console.error(e)
 		}

@@ -31,10 +31,10 @@ module.exports = {
 
 		await guildMember.roles.remove(teamRole)
 
+		const TeamCollection = client.database.collection('Teams')
+
 		if (memberCount <= 1) {
-			await client.database
-				.collection('Teams')
-				.doc(teamRole.name)
+			await TeamCollection.doc(teamRole.name)
 				.delete()
 				.then(() => {
 					send(Embed.SendSuccess('Leave', `Left ${teamRole.name} successfully`))
@@ -48,10 +48,9 @@ module.exports = {
 						)
 					)
 				})
+			role.edit({ color: [252, 210, 0] })
 		} else {
-			await client.database
-				.collection('Teams')
-				.doc(teamRole.name)
+			await TeamCollection.doc(teamRole.name)
 				.update({
 					members: [...role.members.values()]
 						.map((e) => e.id)
