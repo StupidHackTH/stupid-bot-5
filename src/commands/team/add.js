@@ -70,7 +70,7 @@ module.exports = {
       return send(
         Embed.SendError(
           'Add to Team',
-          "Some members don't have a participant role. They'll have to verify their tickets first.",
+          "Some of the mentioned members don't have a participant role. They'll have to verify their tickets first.",
         ),
       )
     }
@@ -83,7 +83,6 @@ module.exports = {
     // sender don't have team
     if (!guildMember.roles.cache.some((e) => e.name.startsWith('Team'))) {
       // create team for sender
-      console.log('this guy dont have team lol')
       admin = guildMember.id
       color = "fcd200"
       const availableRoles = allRoles.filter(
@@ -100,10 +99,10 @@ module.exports = {
 
     // no avaiable team left
     if (!teamRole) {
-      return send(Embed.SendError('Add to Team', 'No avialable team left ;('))
+      return send(Embed.SendError('Add to Team', 'No available team left ;('))
     }
 
-    // check if mentioned user don't have team
+    // check if mentioned users don't have a team
     const allowedParticipants = RealParticipants.filter((m) => {
       return !m.roles.cache.some(
         (r) => r.name.startsWith('Team') && r.name !== teamRole.name,
@@ -114,7 +113,7 @@ module.exports = {
       return send(
         Embed.SendError(
           'Add to Team',
-          `Some of your members already a have team. Please do \`\`${prefix}leave\`\` first`,
+          `Some of your members already have a team. Please do \`\`${prefix}leave\`\` first`,
         ),
       )
     }

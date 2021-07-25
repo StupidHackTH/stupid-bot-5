@@ -43,8 +43,6 @@ module.exports = {
           console.error(err)
           send(Embed.SendError("Leave", `There was an error while trying to leave the team`))
         })
-
-      return
     }
 
     await client.database
