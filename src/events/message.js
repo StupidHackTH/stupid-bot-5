@@ -13,6 +13,8 @@ module.exports = {
       )}`,
     )
 
+    const adminIds = ['567046882321498113', '249515667252838421']
+
     if (message.author.bot) return
 
     if (message.content.startsWith(';')) {

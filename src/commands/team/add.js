@@ -112,11 +112,42 @@ module.exports = {
       )
     }
 
+    // idk?
+    const alreadyInTeam = RealParticipants.every((m) => {
+      return m.roles.cache.some((r) => r.name.startsWith('Team') && r.name === teamRole.name)
+    })
+
+    if (alreadyInTeam && mentions.users.length > 0) {
+      return send(
+        Embed.SendError(
+          'Add to Team',
+          `Every member that you're trying to add is already in this team.`,
+        ),
+      )
+    }
+
     // add role to all
     const addRole = async () => {
       for await (const user of [...allowedParticipants, guildMember]) {
         await user.roles.add(teamRole)
       }
+      
+      const role = await guild.roles.fetch(teamRole.id)
+
+      await client.database
+        .collection('Teams')
+        .doc(teamRole.name)
+        .set({
+          name: teamRole.name,
+          members: [...role.members.values()].map((e) => e.id)
+        })
+        .then(() => { 
+          console.log("Added team to database")
+        })
+        .catch((err) => {
+          console.error("Error wrting to database", err)
+        })
+
       return
     }
 
