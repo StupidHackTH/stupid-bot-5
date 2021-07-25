@@ -13,9 +13,17 @@ module.exports = {
   },
   execute({ send }) {
     send(Embed.Embed(
-      "Help",
-      "stp add - create team if you don't have one\n" +
-        "stp add [user1] [user2] ... - create team with mentioned user if you don't have team / add member if you already have team",
+      "Help", "", "#7f03fc",
+      [
+        {
+          "name": "`stp add`",
+          "value": "creates a new team if you don't have one"
+        },
+        {
+          "name": "`stp add [user1] [user2] ...`",
+          "value": "creates new team with mentioned user if you don't a have team / add member if you already have one"
+        }
+      ]
     ))
   },
 }
