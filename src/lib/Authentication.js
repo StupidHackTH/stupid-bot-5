@@ -1,6 +1,6 @@
 const firebase = require('firebase')
 const { guildId } = require('../../config.json')
-const Embed = require('../../lib/Embed')
+const Embed = require('./Embed')
 
 module.exports = Authenticate
 
