@@ -47,6 +47,9 @@ module.exports = {
   async execute({ client, send, guild, guildMember, mentions }) {
     const allRoles = [...guild.roles.cache.values()]
     const participantRole = allRoles.find((r) => r.name == 'Participant')
+
+    if (!participantRole) return send(Embed.SendError('Add to Team', "idk there's no participants lol.",))
+   
     const allParticipants = [...participantRole.members.values()]
     const mentionedParticipants = mentions.users
 
@@ -55,7 +58,7 @@ module.exports = {
       return send(
         Embed.SendError(
           'Add to Team',
-          "You don't a have participant role. Try /verify if you have Eventpop reference code.",
+          "You don't a have participant role. Try /verify if you have an Eventpop reference code.",
         ),
       )
     }
@@ -67,18 +70,20 @@ module.exports = {
       return send(
         Embed.SendError(
           'Add to Team',
-          "Some members don't have a participant role. Verify their tickets first.",
+          "Some members don't have a participant role. They'll have to verify their tickets first.",
         ),
       )
     }
 
     // find team
     let teamRole = undefined
+    let admin = undefined
 
     // sender don't have team
     if (!guildMember.roles.cache.some((e) => e.name.startsWith('Team'))) {
       // create team for sender
       console.log('this guy dont have team lol')
+      admin = guildMember.id
       const availableRoles = allRoles.filter(
         (r) => r.members.size === 0 && r.name.startsWith('Team'),
       )
@@ -86,7 +91,7 @@ module.exports = {
         availableRoles[Math.floor(Math.random() * availableRoles.length)]
     } else {
       if (RealParticipants.length === 0) {
-        return send(Embed.SendError('Add to Team', 'You already a have team.'))
+        return send(Embed.SendError('Add to Team', 'You already have a team.'))
       }
       teamRole = guildMember.roles.cache.find((r) => r.name.startsWith('Team'))
     }
@@ -139,8 +144,9 @@ module.exports = {
         .doc(teamRole.name)
         .set({
           name: teamRole.name,
-          members: [...role.members.values()].map((e) => e.id)
-        })
+          members: [...role.members.values()].map((e) => e.id),
+          ...(admin && { admins: [admin] }) // will add owner as admin if team was just created
+        }, { merge: true })
         .then(() => { 
           console.log("Added team to database")
         })

@@ -15,7 +15,7 @@ async function updateTeamList(oldguild) {
   const messageList = await channel.messages.fetch({ limit: 100 })
 
   const messages = [...messageList.values()].filter((e) =>
-    [...e.mentions.roles.values()][0].name.startsWith('Team'),
+    [...e.mentions.roles.values()][0]?.name.startsWith('Team'),
   )
 
   console.log(`messages role: ${messages.length}, roles: ${roles.length}`)

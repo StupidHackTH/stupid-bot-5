@@ -3,12 +3,21 @@ const { prefix } = require('../../../config.json')
 
 module.exports = {
   name: 'help',
+  description: 'Get bot info',
   slash: {
     registerData: {
       guildOnly: true,
       data: {
         name: 'help',
         description: 'Get bot info',
+        options: [
+          {
+            name: 'command',
+            description: 'command name',
+            type: 3,
+            required: false,
+          }
+        ],
       },
     },
   },
@@ -25,16 +34,16 @@ module.exports = {
       }
 
       const commandFields = Object.entries(command)
-      .filter((field) => ['name', 'description', 'aliases', 'usage'].includes(field[0]))
-      .map((field) => {
-        return field[0] ===  'aliases' ? [field[0], field[1].join(", ")] : field
-      })
-      .map((field) => {
-        return {
-          name: `\`${field[0]}\``,
-          value: `${field[1]}`
-        }
-      })
+        .filter((field) => ['name', 'description', 'aliases', 'usage'].includes(field[0]))
+        .map((field) => {
+          return field[0] ===  'aliases' ? [field[0], field[1].join(", ")] : field
+        })
+        .map((field) => {
+          return {
+            name: `\`${field[0]}\``,
+            value: `${field[1]}`
+          }
+        })
 
       send(Embed.Embed(
         `Help: ${command.name}`, `type \`${prefix}help\` or \`/help\` to get a list of all commands`, "#7f03fc", commandFields

@@ -33,7 +33,7 @@ module.exports = {
     if (!command) {
       return send(Embed.SendError(
         'Reload',
-        `There is no command with name or alias \`${commandName}\`, ${message.author}!`,
+        `There is no command with name or alias \`${commandName}\`!`,
       ))
     }
 

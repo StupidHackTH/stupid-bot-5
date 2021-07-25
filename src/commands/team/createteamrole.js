@@ -14,7 +14,7 @@ module.exports = {
         reason: 'Command was invoked',
       })
     }
-    send(Embed.SendSuccess('Create Team', `Created ${args[0]} Team`))
+    send(Embed.SendSuccess('Create Team', `Created ${args[0]} Teams`))
 
     updateTeamList(guild)
   },

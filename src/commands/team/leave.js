@@ -25,10 +25,28 @@ module.exports = {
         Embed.SendError('Leave Team', `You don't have a team, ${guildMember}.`),
       )
     }
-
-    await guildMember.roles.remove(teamRole)
-
+    
     const role = await guild.roles.fetch(teamRole.id)
+    const memberCount = [...role.members.values()].length
+    
+    await guildMember.roles.remove(teamRole)
+    
+    if (memberCount <= 1) {
+      await client.database
+        .collection('Teams')
+        .doc(teamRole.name)
+        .delete()
+        .then(() => { 
+          send(Embed.SendSuccess("Leave", `Left ${teamRole.name} successfully`))
+        })
+        .catch((err) => {
+          console.error(err)
+          send(Embed.SendError("Leave", `There was an error while trying to leave the team`))
+        })
+
+      return
+    }
+
     await client.database
       .collection('Teams')
       .doc(teamRole.name)
@@ -44,6 +62,6 @@ module.exports = {
 
     updateTeamList(guild)
 
-    send(Embed.SendSuccess('Leave Team successfully'))
+    send(Embed.SendSuccess('Leave', `Left ${teamRole.name} successfully`))
   },
 }

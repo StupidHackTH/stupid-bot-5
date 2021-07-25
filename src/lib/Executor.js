@@ -7,7 +7,7 @@ module.exports = Executor
 async function Executor(commandName, context) {
   if (context.guildMember.bot) return
 
-  const adminIds = ['249515667252838421']
+  const adminIds = ['249515667252838421', '567046882321498113']
 
   const { channel, client, send, member, args } = context
 
@@ -29,7 +29,7 @@ async function Executor(commandName, context) {
   // admin Only Command
   if (command.adminOnly) {
     if (!adminIds.includes(member.id)) {
-      return message.reply('Unauthorized')
+      return send(Embed.SendError('Executor', 'unauthorized'))
     }
   }
 
@@ -79,6 +79,6 @@ async function Executor(commandName, context) {
     command.execute(context)
   } catch (error) {
     console.error(error)
-    message.reply('There was an error trying to execute that command!')
+    send(Embed.SendError('Executor', 'There was an error trying to execute that command!'))
   }
 }

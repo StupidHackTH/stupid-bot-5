@@ -12,7 +12,7 @@ module.exports = {
     },
   },
   async execute({ send, member }) {
-    send(`Sent instruction, ${member}`)
+    send(`Sent instructions in your DM, ${member}`)
     member.createDM().then((channel) => {
       channel.send(Embed.Embed(
         'Verify',

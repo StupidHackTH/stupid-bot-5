@@ -30,11 +30,12 @@ module.exports = {
 
     try {
       // const array = ToArray(args[0])
+      if (args[0].split("").every((c) => /^#[0-9A-F]{6}$/i.test(contains(c)))) throw new Error("HexCode was not formatted correctly.")
       const color = ToColorCode(args[0])
 
       await role.edit({ color })
 
-      send(Embed.Embed("Color", `A new color was set for ${role.name}: #${color.toString(16)}`, color.toString(16)))
+      send(Embed.Embed("🎨 Color", `A new color was set for ${role.name}: #${color.toString(16)}`, color.toString(16)))
     } catch (e) {
       console.error(e)
       return send(Embed.SendError("Color", "The color code was not formatted correctly <#abcdef or abcdef> or there was an error"))
