@@ -23,7 +23,7 @@ async function Executor(commandName, context) {
 
   // bot room only
   if (botChannelFilter && !channelReg.test(channel.name)) {
-    return send(Embed.Error('Executor', 'command can only be used in bot room'))
+    return send(Embed.SendError('Executor', 'command can only be used in bot room'))
   }
 
   // admin Only Command
@@ -35,7 +35,7 @@ async function Executor(commandName, context) {
 
   if (command.guildOnly && channel.type === 'dm') {
     return send(
-      Embed.Error('Executor', "I can't execute that command inside DMs!"),
+      Embed.SendError('Executor', "I can't execute that command inside DMs!"),
     )
   }
 
@@ -46,7 +46,7 @@ async function Executor(commandName, context) {
       reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``
     }
 
-    return send(Embed.Error('Executor', reply))
+    return send(Embed.SendError('Executor', reply))
   }
 
   const { cooldowns } = client
