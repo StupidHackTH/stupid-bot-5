@@ -1,3 +1,5 @@
+const { Embed } = require("../../lib/Embed")
+
 module.exports = {
   name: 'verify',
   description: 'verify your account with Eventpop reference code',
@@ -12,9 +14,10 @@ module.exports = {
   async execute({ send, member }) {
     send(`Sent instruction, ${member}`)
     member.createDM().then((channel) => {
-      channel.send(
+      channel.send(Embed.Embed(
+        'Verify',
         'enter Eventpop reference code ``#XXXXX-XXXXXXX`` in THIS channel',
-      )
+      ))
     })
   },
 }

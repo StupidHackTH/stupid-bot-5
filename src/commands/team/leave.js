@@ -28,6 +28,20 @@ module.exports = {
 
     await guildMember.roles.remove(teamRole)
 
+    const role = await guild.roles.fetch(teamRole.id)
+    await client.database
+      .collection('Teams')
+      .doc(teamRole.name)
+      .update({
+        members: [...role.members.values()].map((e) => e.id).filter((id) => id !== guildMember.user.id)
+      })
+      .then(() => { 
+        console.log("Removed user from team database")
+      })
+      .catch((err) => {
+        console.error("Error wrting to database", err)
+      })
+
     updateTeamList(guild)
 
     send(Embed.SendSuccess('Leave Team successfully'))
