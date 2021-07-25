@@ -8,6 +8,8 @@ async function updateTeamList(oldguild) {
 
   const channel = guild.channels.cache.find((e) => e.id === teamChannelId)
 
+  if (!channel) return
+
   const roles = [...guild.roles.cache.values()].filter((e) =>
     e.name.startsWith('Team'),
   )
@@ -40,9 +42,10 @@ async function updateTeamList(oldguild) {
     messages.forEach((message) => {
       const role = message.mentions.roles.first()
       const teamName = ''
-      const members = [...role.members.values()].join(', ')
-
-      message.edit(`${role} ${teamName} — ${members}`)
+      const members = role.members
+      
+      if (!members.equals(message.mentions.members))
+        message.edit(`${role} ${teamName} — ${[...members.values()].join(', ')}`)
     })
   }
 }

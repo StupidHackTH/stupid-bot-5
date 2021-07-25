@@ -23,15 +23,28 @@ module.exports = {
       },
     },
   },
-  async execute({ guildMember, send, args }) {
+  async execute({ guildMember, send, args, client }) {
     const role = guildMember.roles.cache.find((e) => e.name.startsWith('Team'))
 
     if (!role) return send(Embed.SendError("Color", "You don't a have team yet."))
 
     try {
       // const array = ToArray(args[0])
-      if (args[0].split("").every((c) => /^#[0-9A-F]{6}$/i.test(contains(c)))) throw new Error("HexCode was not formatted correctly.")
+      if (args[0].split("").every((c) => /^[#]{0,1}[0-9A-F]{6}$/i.test(c))) throw new Error("HexCode was not formatted correctly.")
       const color = ToColorCode(args[0])
+      
+      await client.database
+        .collection('Teams')
+        .doc(role.name)
+        .set({
+          color: color.toString(16)
+        }, { merge: true })
+        .then(() => { 
+          console.log("Added team to database")
+        })
+        .catch((err) => {
+          console.error("Error wrting to database", err)
+        })
 
       await role.edit({ color })
 
@@ -52,29 +65,3 @@ const ToColorCode = (s) => {
 
   return parseInt(colorString, 16)
 }
-
-// const ToArray = (s) => {
-//   if (s == undefined) {
-//     throw new Error('Hexcode is required')
-//   }
-//   let k = 0
-//   if (s.startsWith('#')) {
-//     if (s.length != 7) {
-//       throw new Error('Hexcode was not format correctly')
-//     }
-//     k = parseInt(s.slice(1), 16)
-//   } else {
-//     if (s.length != 6) {
-//       throw new Error('Hexcode was not format correctly')
-//     }
-//     k = parseInt(s, 16)
-//   }
-// 
-//   let array = []
-//   for (let i = 0; i < 3; i++) {
-//     array.push(~~(k % 256))
-//     k /= 256
-//   }
-//   return array.reverse()
-// }
-// 

@@ -48,9 +48,19 @@ module.exports = {
 					console.error('Error wrting to database', err)
 				})
 
-			return send(
-				Embed.SendSuccess('Change name', `${role}'s new name is: ${newName}`),
-			)
+			const teamColor = await client.database
+				.collection('Teams')
+				.doc(role.name)
+				.get()
+				.then((snapshot) => {
+					if (snapshot.exists) return snapshot.data().color
+					else return null
+				})
+				.catch((err) => {
+					console.error('Error requesting to database', err)
+				})
+
+			return send(Embed.Embed('Change name', `${role}'s new name is: ${newName}`, teamColor || '#fcd200'))
 		} catch (e) {
 			console.error(e)
 			return send(Embed.SendError('Change name', 'there was an error'))

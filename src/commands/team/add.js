@@ -46,7 +46,7 @@ module.exports = {
   },
   async execute({ client, send, guild, guildMember, mentions }) {
     const allRoles = [...guild.roles.cache.values()]
-    const participantRole = allRoles.find((r) => r.name == 'Participant')
+    const participantRole = allRoles.find((r) => r.name === 'Participant')
 
     if (!participantRole) return send(Embed.SendError('Add to Team', "idk there's no participants lol.",))
    
@@ -78,12 +78,14 @@ module.exports = {
     // find team
     let teamRole = undefined
     let admin = undefined
+    let color = undefined
 
     // sender don't have team
     if (!guildMember.roles.cache.some((e) => e.name.startsWith('Team'))) {
       // create team for sender
       console.log('this guy dont have team lol')
       admin = guildMember.id
+      color = "fcd200"
       const availableRoles = allRoles.filter(
         (r) => r.members.size === 0 && r.name.startsWith('Team'),
       )
@@ -139,19 +141,22 @@ module.exports = {
       
       const role = await guild.roles.fetch(teamRole.id)
 
+      await role.edit({ color: parseInt(color, 16) })
+
       await client.database
         .collection('Teams')
         .doc(teamRole.name)
         .set({
           name: teamRole.name,
           members: [...role.members.values()].map((e) => e.id),
-          ...(admin && { admins: [admin] }) // will add owner as admin if team was just created
+          ...(admin && { admins: [admin] }), // will add owner as admin if team was just created
+          ...(color && { color: color }),
         }, { merge: true })
         .then(() => { 
           console.log("Added team to database")
         })
         .catch((err) => {
-          console.error("Error wrting to database", err)
+          console.error("Error writing to database", err)
         })
 
       return
@@ -162,13 +167,20 @@ module.exports = {
 
       updateTeamList(guild)
 
+      const teamColor = await client.database
+        .collection('Teams')
+        .doc(teamRole.name)
+        .get()
+        .then((snapshot) => {
+					if (snapshot.exists) return snapshot.data().color
+					else return null
+				})
+        .catch((err) => {
+          console.error("Error requesting to database", err)
+        })
+
       const role = await guild.roles.fetch(teamRole.id)
-      return send(
-        Embed.SendSuccess(
-          'Add to Team',
-          `${teamRole} now has: ${[...role.members.values()].join(', ')}`,
-        ),
-      )
+      return send(Embed.Embed('Add to Team', `${teamRole} now has: ${[...role.members.values()].join(', ')}`, teamColor || "#fcd200"))
     } catch (e) {
       updateTeamList(guild)
 

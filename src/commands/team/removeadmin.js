@@ -2,16 +2,16 @@ const Embed = require('../../lib/Embed')
 const firebase = require('firebase')
 
 module.exports = {
-	name: 'deadmin',
+	name: 'de-admin',
 	description: 'removes admin from assigned user',
 	usage: 'name',
-	aliases: ['deop'],
+	aliases: ['de-op'],
 	guildOnly: true,
 	slash: {
 		registerData: {
 			guildOnly: true,
 			data: {
-				name: 'admin',
+				name: 'de-admin',
 				description: 'removes admin from assigned user',
 				options: [
 					{
@@ -46,10 +46,10 @@ module.exports = {
 		const role = guildMember.roles.cache.find((e) => e.name.startsWith('Team'))
 
 		if (!role)
-			return send(Embed.SendError('Admin', "You don't a have team yet."))
+			return send(Embed.SendError('De-Admin', "You don't a have team yet."))
 
 		if (args.length === 0)
-			return send(Embed.SendError('Admin', 'Please mention at least one user.'))
+			return send(Embed.SendError('De-Admin', 'Please mention at least one user.'))
 
 		const mentionedParticipants = mentions.users
 
@@ -58,12 +58,7 @@ module.exports = {
 		})
 
 		if (!inTeam)
-			return send(
-				Embed.SendError(
-					'Admin',
-					'Every mentioned member needs to be in your team.',
-				),
-			)
+			return send(Embed.SendError('De-Admin', 'Every mentioned member needs to be in your team.',))
 
 		try {
 			const admins = await client.database
@@ -78,10 +73,11 @@ module.exports = {
 					}
 				})
 
+			if (!admins)
+				return send(Embed.SendError('De-Admin', "Can't see your team info in the db"))
+
 			if (!admins.includes(guildMember.id))
-				return send(
-					Embed.SendError('Admin', 'You are unauthorized to do this.'),
-				)
+				return send(Embed.SendError('De-Admin', 'You are unauthorized to do this.'))
 
 			const mentionIds = mentions.users.map((user) => user.id)
 			const newAdmins = admins.filter((admin) => !mentionIds.includes(admin))
@@ -107,12 +103,22 @@ module.exports = {
 					console.error('Error wrting to database', err)
 				})
 
-			return send(
-				Embed.SendSuccess('Admin', `Changed ${role.name}'s admin list.`),
-			)
+			const teamColor = await client.database
+				.collection('Teams')
+				.doc(role.name)
+				.get()
+				.then((snapshot) => {
+					if (snapshot.exists) return snapshot.data().color
+					else return null
+				})
+				.catch((err) => {
+					console.error('Error requesting to database', err)
+				})
+
+			return send(Embed.Embed('De-Admin', `Changed ${role.name}'s admin list.`, teamColor || '#fcd200',))
 		} catch (e) {
 			console.error(e)
-			return send(Embed.SendError('Admin', 'there was an error'))
+			return send(Embed.SendError('De-Admin', 'there was an error'))
 		}
 	},
 }
