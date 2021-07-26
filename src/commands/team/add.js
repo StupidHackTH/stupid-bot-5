@@ -108,7 +108,7 @@ module.exports = {
 		// check if mentioned users don't have a team
 		const allowedParticipants = RealParticipants.filter((m) => {
 			return !m.roles.cache.some(
-				(r) => r.name.startsWith('Team') && r.name !== teamRole.name && !r.name.includes('Admin')
+				(r) => r.name.startsWith('Team') && r.name !== teamRole.name
 			)
 		})
 
@@ -121,10 +121,10 @@ module.exports = {
 			)
 		}
 
-		// idk?
+		// alread
 		const alreadyInTeam = RealParticipants.every((m) => {
 			return m.roles.cache.some(
-				(r) => r.name.startsWith('Team') && r.name === teamRole.name && !r.name.includes('Admin')
+				(r) => r.name.startsWith('Team') && r.name === teamRole.name
 			)
 		})
 
@@ -188,13 +188,13 @@ module.exports = {
 			
 			const role = await guild.roles.fetch(teamRole.id)
 
-			const AdminRole = await guild.roles
-				.create({
-					data: { name: `${role.name} Admin`, color: ToColorCode(teamColor || '#fcd200') }
-				})
-				.catch((e) => console.error("Couldn't create role.", e))
-
-			await guildMember.roles.add(AdminRole)
+			// const AdminRole = await guild.roles
+			// 	.create({
+			// 		data: { name: `${role.name} Admin`, color: ToColorCode(teamColor || '#fcd200') }
+			// 	})
+			// 	.catch((e) => console.error("Couldn't create role.", e))
+// 
+			// await guildMember.roles.add(AdminRole)
 			
 			return send(
 				Embed.Embed(

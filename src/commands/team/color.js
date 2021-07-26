@@ -23,7 +23,7 @@ module.exports = {
       },
     },
   },
-  async execute({ guildMember, send, args, client }) {
+  async execute({ guildMember, send, args, client, guild }) {
     const role = guildMember.roles.cache.find((e) => e.name.startsWith('Team'))
 
     if (!role) return send(Embed.SendError("Color", "You don't a have team yet."))
