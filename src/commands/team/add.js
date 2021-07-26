@@ -46,7 +46,7 @@ module.exports = {
 	},
 	async execute({ client, send, guild, guildMember, mentions }) {
 		const allRoles = [...guild.roles.cache.values()]
-		const participantRole = allRoles.find((r) => r.name === 'Participant')
+		const participantRole = allRoles.find((r) => r.name === 'Participant' || r.name === 'Attendee')
 
 		if (!participantRole)
 			return send(
