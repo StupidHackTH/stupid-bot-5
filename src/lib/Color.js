@@ -106,7 +106,7 @@ function ColorPicker(Range) {
   return { Query }
 }
 
-export const ToColorCode = (hex) => {
+const ToColorCode = (hex) => {
   const colorString = s.split("").filter((e) => e !== "#").join("")
 
   if (colorString.length !== 6) {
@@ -115,3 +115,5 @@ export const ToColorCode = (hex) => {
 
   return parseInt(colorString, 16)
 }
+
+module.exports = {ToColorCode}
