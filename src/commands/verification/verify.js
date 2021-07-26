@@ -2,12 +2,12 @@ const Embed = require('../../lib/Embed')
 
 module.exports = {
 	name: 'verify',
-	description: 'verify your account with Eventpop reference code',
+	description: 'verify your account with an Eventpop reference code',
 	slash: {
 		registerData: {
 			data: {
 				name: 'verify',
-				description: 'verify your account with Eventpop reference code',
+				description: 'verify your account with an Eventpop reference code',
 			},
 		},
 	},
@@ -17,7 +17,7 @@ module.exports = {
 			channel.send(
 				Embed.Embed(
 					'Verify',
-					'enter Eventpop reference code ``#XXXXX-XXXXXXX`` in THIS channel',
+					'Enter your Eventpop order number (``#XXXXX-XXXXXXX``) in THIS channel',
 				),
 			)
 		})
