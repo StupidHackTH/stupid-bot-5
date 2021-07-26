@@ -22,10 +22,14 @@ module.exports = {
     },
   },
   usage: "help [<'all'> [command]]",
-  execute({ send, args, message }) {
-    const { commands } = message.client;
+  execute({ send, args, client }) {
+    const { commands } = client ;
 
-    if (args.length > 0) {
+    let hasArgs = true
+    if (!args) hasArgs = false
+    else if (args.length === 0) hasArgs = false
+
+    if (hasArgs) {
       const command = commands
         .find((command) => args[0] === command.name)
 
