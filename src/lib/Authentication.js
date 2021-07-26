@@ -62,7 +62,7 @@ async function Authenticate(client, refCode, message) {
 		}
 	}
 
-	if (participantSnapshot.exists) {
+	else if (participantSnapshot.exists) {
 		const { used } = participantSnapshot.data()
 
 		if (used) {
@@ -100,7 +100,9 @@ async function Authenticate(client, refCode, message) {
 			console.error(e)
 			message.channel.send(Embed.SendError('Error', 'Please contact staff'))
 		}
-	} else {
+	}
+	
+	else {
 		return message.channel.send(
 			Embed.SendError('Failed', 'Invalid reference code'),
 		)
