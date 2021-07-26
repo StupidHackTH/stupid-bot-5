@@ -1,6 +1,7 @@
 const Embed = require('../../lib/Embed')
 const { prefix } = require('../../../config.json')
 const updateTeamList = require('../../lib/updateTeam')
+const { ToColorCode } = require('../../lib/Color')
 
 module.exports = {
 	name: 'add',
@@ -210,14 +211,4 @@ module.exports = {
 			console.error(e)
 		}
 	},
-}
-
-const ToColorCode = (s) => {
-	const colorString = s.split("").filter((e) => e !== "#").join("")
-  
-	if (colorString.length !== 6) {
-	  throw new Error('HexCode was not formatted correctly.')
-	}
-  
-	return parseInt(colorString, 16)
 }

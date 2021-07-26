@@ -1,3 +1,4 @@
+const { ToColorCode } = require('../../lib/Color')
 const Embed = require('../../lib/Embed')
 
 module.exports = {
@@ -60,14 +61,4 @@ module.exports = {
       return send(Embed.SendError("Color", "The color code was not formatted correctly <#abcdef or abcdef> or there was an error"))
     }
   },
-}
-
-const ToColorCode = (s) => {
-  const colorString = s.split("").filter((e) => e !== "#").join("")
-
-  if (colorString.length !== 6) {
-    throw new Error('HexCode was not formatted correctly.')
-  }
-
-  return parseInt(colorString, 16)
 }

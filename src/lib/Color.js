@@ -105,3 +105,13 @@ function ColorPicker(Range) {
 
   return { Query }
 }
+
+export const ToColorCode = (hex) => {
+  const colorString = s.split("").filter((e) => e !== "#").join("")
+
+  if (colorString.length !== 6) {
+    throw new Error('HexCode was not formatted correctly.')
+  }
+
+  return parseInt(colorString, 16)
+}

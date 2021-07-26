@@ -1,3 +1,5 @@
+const { ToColorCode } = require("./Color")
+
 /***
  * Returns a discord.js Embed
  * @constructor
@@ -8,7 +10,7 @@
 const Embed = (title, description = '', color = '#7f03fc', fields = []) => {
   return {
     embed: {
-      color: HexToDec(color),
+      color: ToColorCode(color),
       title,
       description,
       fields,
@@ -34,16 +36,6 @@ const SendError = (title = '', description = '') => {
  */
 const SendSuccess = (title = '', description = '') => {
   return Embed(`🙌 Success${title ? `: ${title}` : ''}`, description, '#4aff83')
-}
-
-const HexToDec = (hex) => {
-  return parseInt(
-    hex
-      .split('')
-      .filter((s) => s !== '#')
-      .join(''),
-    16,
-  )
 }
 
 module.exports = {
