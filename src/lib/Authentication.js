@@ -75,7 +75,7 @@ async function Authenticate(client, refCode, message) {
 		}
 
 		try {
-			await docRef.set({
+			await participantDocRef.set({
 				used: true,
 				used_by: message.author.id,
 				used_at: firebase.firestore.FieldValue.serverTimestamp(),
