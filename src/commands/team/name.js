@@ -31,7 +31,7 @@ module.exports = {
 		if (!role)
 			return send(Embed.SendError('Color', "You don't a have team yet."))
 
-		const newName = args[0]
+		const newName = [...args].join(" ")
 
 		try {
 			await client.database
