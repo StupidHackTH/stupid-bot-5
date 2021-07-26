@@ -136,9 +136,14 @@ module.exports = {
 
 		// remove role to all
 		const removeRole = async () => {
+			const allRoles = [...guild.roles.cache.values()]
+			const AdminRole = allRoles.find((r) => r.name.includes(`${teamRole.name} Admin`))
+
 			for await (const user of allowedParticipants) {
 				await user.roles.remove(teamRole)
+				await guildMember.roles.remove(AdminRole)
 			}
+
 
 			const membersToRemove = allowedParticipants.map((user) => user.id)
 

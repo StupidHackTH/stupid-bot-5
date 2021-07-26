@@ -185,8 +185,17 @@ module.exports = {
 				.catch((err) => {
 					console.error('Error requesting to database', err)
 				})
-
+			
 			const role = await guild.roles.fetch(teamRole.id)
+
+			const AdminRole = await guild.roles
+				.create({
+					data: { name: `${role.name} Admin`, color: ToColorCode(teamColor || '#fcd200') }
+				})
+				.catch((e) => console.error("Couldn't create role.", e))
+
+			await guildMember.roles.add(AdminRole)
+			
 			return send(
 				Embed.Embed(
 					'Add to Team',
@@ -200,4 +209,14 @@ module.exports = {
 			console.error(e)
 		}
 	},
+}
+
+const ToColorCode = (s) => {
+	const colorString = s.split("").filter((e) => e !== "#").join("")
+  
+	if (colorString.length !== 6) {
+	  throw new Error('HexCode was not formatted correctly.')
+	}
+  
+	return parseInt(colorString, 16)
 }

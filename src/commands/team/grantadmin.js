@@ -42,7 +42,7 @@ module.exports = {
 			},
 		},
 	},
-	async execute({ guildMember, send, args, mentions, client }) {
+	async execute({ guildMember, send, args, mentions, client, guild }) {
 		const role = guildMember.roles.cache.find((e) => e.name.startsWith('Team'))
 
 		if (!role)
@@ -58,7 +58,7 @@ module.exports = {
 		})
 
 		if (!inTeam)
-			return send(Embed.SendError('Admin', 'Every mentioned member needs to be in your team.'))
+			return send(Embed.SendError('Admin', 'Every mentioned member must be in your team.'))
 
 		try {
 			const admins = await client.database
@@ -94,7 +94,7 @@ module.exports = {
 						"Everyone you're trying to add is already an admin.",
 					),
 				)
-
+				
 			await client.database
 				.collection('Teams')
 				.doc(role.name)
@@ -107,18 +107,28 @@ module.exports = {
 				.catch((err) => {
 					console.error('Error wrting to database', err)
 				})
-
+				
 			const teamColor = await client.database
 				.collection('Teams')
 				.doc(role.name)
 				.get()
-				.then((snapshot) => {
-					if (snapshot.exists) return snapshot.data().color
-					else return null
+					.then((snapshot) => {
+						if (snapshot.exists) return snapshot.data().color
+						else return null
+					})
+					.catch((err) => {
+						console.error('Error requesting to database', err)
+					})
+				
+			const AdminRole = await guild.roles
+				.create({
+					data: { name: `${role.name} Admin`, color: ToColorCode(teamColor || '#fcd200') }
 				})
-				.catch((err) => {
-					console.error('Error requesting to database', err)
-				})
+				.catch((e) => console.error("Couldn't create role.", e))
+			
+			for await (const member of mentionedParticipants) {
+				await member.roles.add(AdminRole)
+			}
 
 			return send(Embed.Embed('Admin', `Changed ${role.name}'s admin list.`, teamColor || '#fcd200',))
 		} catch (e) {
@@ -126,4 +136,14 @@ module.exports = {
 			return send(Embed.SendError('Admin', 'there was an error'))
 		}
 	},
+}
+
+const ToColorCode = (s) => {
+	const colorString = s.split("").filter((e) => e !== "#").join("")
+  
+	if (colorString.length !== 6) {
+	  throw new Error('HexCode was not formatted correctly.')
+	}
+  
+	return parseInt(colorString, 16)
 }

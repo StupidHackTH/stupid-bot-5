@@ -58,7 +58,7 @@ module.exports = {
 		})
 
 		if (!inTeam)
-			return send(Embed.SendError('De-Admin', 'Every mentioned member needs to be in your team.',))
+			return send(Embed.SendError('De-Admin', 'Every mentioned member must be in your team.',))
 
 		try {
 			const admins = await client.database
@@ -85,7 +85,7 @@ module.exports = {
 			if (newAdmins.length === 0)
 				return send(
 					Embed.Embed(
-						'Admin',
+						'De-Admin',
 						"Everyone you're trying to add is not an admin.",
 					),
 				)
@@ -102,6 +102,16 @@ module.exports = {
 				.catch((err) => {
 					console.error('Error wrting to database', err)
 				})
+
+			
+			const allRoles = [...guild.roles.cache.values()]
+			const AdminRole = allRoles.find((r) => r.name.includes(`${role.name} Admin`))
+
+			if (AdminRole) {
+				for await (const member of mentionedParticipants) {
+					await member.roles.remove(AdminRole)
+				}
+			}
 
 			const teamColor = await client.database
 				.collection('Teams')

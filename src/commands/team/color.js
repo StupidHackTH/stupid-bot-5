@@ -46,6 +46,12 @@ module.exports = {
           console.error("Error wrting to database", err)
         })
 
+
+      const allRoles = [...guild.roles.cache.values()]
+      const AdminRole = allRoles.find((r) => r.name.includes(`${role.name} Admin`))
+  
+      if (AdminRole) await AdminRole.edit({ color })
+      
       await role.edit({ color })
 
       send(Embed.Embed("🎨 Color", `A new color was set for ${role.name}: #${color.toString(16)}`, color.toString(16)))

@@ -31,6 +31,11 @@ module.exports = {
 
 		await guildMember.roles.remove(teamRole)
 
+		const allRoles = [...guild.roles.cache.values()]
+      	const AdminRole = allRoles.find((r) => r.name.includes(`${role.name} Admin`))
+
+      	if (AdminRole) await guildMember.roles.remove(AdminRole)
+
 		const TeamCollection = client.database.collection('Teams')
 
 		if (memberCount <= 1) {
