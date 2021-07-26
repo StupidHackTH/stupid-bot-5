@@ -11,7 +11,7 @@ async function updateTeamList(oldguild, client) {
 	if (!channel) return
 
 	const roles = [...guild.roles.cache.values()].filter((e) =>
-		e.name.startsWith('Team') || !e.name.includes('Admin')
+		e.name.startsWith('Team') && !e.name.includes('Admin')
 	)
 
 	const messageList = await channel.messages.fetch({ limit: 100 })
