@@ -53,12 +53,14 @@ module.exports = {
         `Help: ${command.name}`, `type \`${prefix}help\` or \`/help\` to get a list of all commands`, "#7f03fc", commandFields
       ))
     } else {
-      const commandFields = commands.map((command) => {
-        return {
-          name: `\`${command.name}\``,
-          value: `${command.description}`
-        }
-      })
+      const commandFields = commands
+        .filter((command) => !command.adminOnly)
+        .map((command) => {
+          return {
+            name: `\`${command.name}\``,
+            value: `${command.description}`
+          }
+        })
 
       send(Embed.Embed(
         "Help", `type \`${prefix}help <command>\` or \`/help <command>\` to get more info about a command`, "#7f03fc", commandFields
