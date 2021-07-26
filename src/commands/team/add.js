@@ -46,7 +46,8 @@ module.exports = {
 	},
 	async execute({ client, send, guild, guildMember, mentions }) {
 		const allRoles = [...guild.roles.cache.values()]
-		const participantRole = allRoles.find((r) => r.name === 'Participant' || r.name === 'Attendee')
+		const participantRole = allRoles.find((r) => r.name === 'Participant')
+		const attendeeRole = allRoles.find((r) => r.name === 'Attendee')
 
 		if (!participantRole)
 			return send(
@@ -57,17 +58,17 @@ module.exports = {
 		const mentionedParticipants = mentions.users
 
 		// check if sender have participant role
-		if (!participantRole.members.has(guildMember.id)) {
+		if (!participantRole.members.has(guildMember.id) && !attendeeRole.members.has(guildMember.id)) {
 			return send(
 				Embed.SendError(
 					'Add to Team',
-					"You don't a have participant role. Try /verify if you have an Eventpop reference code."
+					"You don't a have participant and attendee role. Try /verify if you have an Eventpop reference code."
 				)
 			)
 		}
-		// check if mentioned user have participant role
+		// check if mentioned user have participant/attendee role
 		const RealParticipants = mentionedParticipants.filter((m) => {
-			return m.roles.cache.has(participantRole.id)
+			return m.roles.cache.has(participantRole.id) || m.roles.cache.has(attendeeRole.id)
 		})
 		if (mentions.users.length !== RealParticipants.length) {
 			return send(
