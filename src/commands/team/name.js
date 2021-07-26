@@ -1,4 +1,5 @@
 const Embed = require('../../lib/Embed')
+const updateTeamList = require('../../lib/updateTeam')
 
 module.exports = {
 	name: 'teamname',
@@ -24,7 +25,7 @@ module.exports = {
 			},
 		},
 	},
-	async execute({ guildMember, send, args, client }) {
+	async execute({ guildMember, send, args, client, guild }) {
 		const role = guildMember.roles.cache.find((e) => e.name.startsWith('Team'))
 
 		if (!role)
@@ -41,7 +42,7 @@ module.exports = {
 				})
 				.then(() => {
 					console.log(
-						`Changed ${role.name}'s name to ${newName} in the database`,
+						`Changed ${role.name}'s name to ${newName} in the database`
 					)
 				})
 				.catch((err) => {
@@ -60,9 +61,18 @@ module.exports = {
 					console.error('Error requesting to database', err)
 				})
 
-			return send(Embed.Embed('Change name', `${role}'s new name is: ${newName}`, teamColor || '#fcd200'))
+			updateTeamList(guild, client)
+
+			return send(
+				Embed.Embed(
+					'Change name',
+					`${role}'s new name is: ${newName}`,
+					teamColor || '#fcd200'
+				)
+			)
 		} catch (e) {
 			console.error(e)
+			updateTeamList(guild, client)
 			return send(Embed.SendError('Change name', 'there was an error'))
 		}
 	},
