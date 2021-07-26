@@ -84,12 +84,12 @@ module.exports = {
 		let color = undefined
 
 		// sender don't have team
-		if (!guildMember.roles.cache.some((e) => e.name.startsWith('Team'))) {
+		if (!guildMember.roles.cache.some((e) => e.name.startsWith('Team') && !e.name.includes('Admin'))) {
 			// create team for sender
 			admin = guildMember.id
 			color = 'fcd200'
 			const availableRoles = allRoles.filter(
-				(r) => r.members.size === 0 && r.name.startsWith('Team')
+				(r) => r.members.size === 0 && r.name.startsWith('Team') && !r.name.includes('Admin')
 			)
 			teamRole =
 				availableRoles[Math.floor(Math.random() * availableRoles.length)]
@@ -97,7 +97,7 @@ module.exports = {
 			if (RealParticipants.length === 0) {
 				return send(Embed.SendError('Add to Team', 'You already have a team.'))
 			}
-			teamRole = guildMember.roles.cache.find((r) => r.name.startsWith('Team'))
+			teamRole = guildMember.roles.cache.find((r) => r.name.startsWith('Team') && !r.name.includes('Admin'))
 		}
 
 		// no avaiable team left
@@ -108,7 +108,7 @@ module.exports = {
 		// check if mentioned users don't have a team
 		const allowedParticipants = RealParticipants.filter((m) => {
 			return !m.roles.cache.some(
-				(r) => r.name.startsWith('Team') && r.name !== teamRole.name
+				(r) => r.name.startsWith('Team') && r.name !== teamRole.name && !r.name.includes('Admin')
 			)
 		})
 
@@ -124,7 +124,7 @@ module.exports = {
 		// idk?
 		const alreadyInTeam = RealParticipants.every((m) => {
 			return m.roles.cache.some(
-				(r) => r.name.startsWith('Team') && r.name === teamRole.name
+				(r) => r.name.startsWith('Team') && r.name === teamRole.name && !r.name.includes('Admin')
 			)
 		})
 
