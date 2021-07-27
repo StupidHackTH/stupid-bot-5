@@ -8,6 +8,15 @@ module.exports = {
 	hide: true,
 	usage: '[name] [video link]',
 	async execute({ send, member, client, args }) {
+		if (args.length < 2) {
+			return send(
+				Embed.SendError(
+					'Failed',
+					`found ${args.length} argument, expect at least 2 arguments`
+				)
+			)
+		}
+
 		// use member in case of submit on Direct message
 		const guild = await client.guilds.fetch(guildId)
 		const guildMember = guild.members.cache.get(member.id)
@@ -29,11 +38,14 @@ module.exports = {
 		const teamDocumentSnapshot = await teamDocumentRef.get()
 		var { submissions } = teamDocumentSnapshot.data()
 
+		const submissionLink = args.splice(args.length - 1, 1)
+		const submissionName = args.join(' ')
+
 		// append submited video
 		if (!submissions) {
-			submissions = [{ name: args[0], link: args[1] }]
+			submissions = [{ name: submissionName, link: submissionLink }]
 		} else {
-			submissions.push({ name: args[0], link: args[1] })
+			submissions.push({ name: submissionName, link: submissionLink })
 		}
 
 		// update database

@@ -7,8 +7,7 @@ module.exports = Executor
 async function Executor(commandName, context) {
 	console.log(`${context.member.username} call: ${commandName}`)
 
-	const adminIds = ['249515667252838421', '567046882321498113', ...process.env.WHITELIST.split(' ')]
-	console.log(adminIds)
+	const adminIds = ['249515667252838421', '567046882321498113']
 
 	const { channel, client, send, member, args } = context
 

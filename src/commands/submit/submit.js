@@ -19,7 +19,7 @@ module.exports = {
 			channel.send(
 				Embed.Embed(
 					'Submit Command',
-					'you can submit via DM to keep your submission secret to other team.\n The 0-index will be the main submission',
+					'you can submit via DM to keep your submission secret to other team\n The 0-index will be the main submission\nnote that submission name is only to make it easier to remember',
 					'#000000',
 					[
 						{
