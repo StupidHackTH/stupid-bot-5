@@ -32,7 +32,7 @@ async function Authenticate(client, refCode, message) {
 			return message.channel.send(
 				Embed.SendError(
 					'Error',
-					'This code is already used. Please contact staff',
+					'This code is already used. Please contact the staff',
 				),
 			)
 		}
@@ -54,11 +54,11 @@ async function Authenticate(client, refCode, message) {
 			await guildMember.roles.add(attendeeRole)
 
 			await message.channel.send(
-				Embed.SendSuccess('Attendee Role Granted', 'Enjoy Hackathon!'),
+				Embed.SendSuccess('Attendee Role Granted', 'Enjoy the Hackathon!'),
 			)
 		} catch (e) {
 			console.error(e)
-			message.channel.send(Embed.SendError('Error', 'Please contact staff'))
+			message.channel.send(Embed.SendError('Error', 'Please contact the staff.'))
 		}
 	}
 
@@ -94,7 +94,7 @@ async function Authenticate(client, refCode, message) {
 			await guildMember.roles.add(participantRole)
 
 			await message.channel.send(
-				Embed.SendSuccess('Participant Role Granted', 'Enjoy Hackathon!'),
+				Embed.SendSuccess('Participant Role Granted', 'Enjoy the Hackathon!'),
 			)
 		} catch (e) {
 			console.error(e)

@@ -5,7 +5,7 @@ const { ToColorCode } = require('../../lib/Color')
 module.exports = {
 	name: 'admin',
 	description: 'assigns admin to assigned user',
-	usage: 'name',
+	usage: 'admin <@user>',
 	aliases: ['op'],
 	guildOnly: true,
 	slash: {

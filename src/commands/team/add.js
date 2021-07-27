@@ -5,8 +5,8 @@ const { ToColorCode } = require('../../lib/Color')
 
 module.exports = {
 	name: 'add',
-	description: 'add member to team',
-	usage: 'add [user]',
+	description: 'add member / create team / submit with no member to create team',
+	usage: 'add <@user>',
 	aliases: ['addteam', 'teamadd'],
 	guildOnly: true,
 	slash: {

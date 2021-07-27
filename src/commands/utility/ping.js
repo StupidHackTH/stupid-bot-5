@@ -1,6 +1,6 @@
 module.exports = {
   name: 'ping',
-  description: 'Information about the arguments provided.',
+  description: 'pong.',
   slash: {
     registerData: {
       guildOnly: true,

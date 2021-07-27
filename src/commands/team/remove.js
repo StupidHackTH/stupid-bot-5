@@ -4,8 +4,8 @@ const updateTeamList = require('../../lib/updateTeam')
 
 module.exports = {
 	name: 'remove',
-	description: 'remove member from team',
-	usage: 'remove [user]',
+	description: 'remove  the mentioned members from team',
+	usage: 'remove <@user>',
 	aliases: ['teamremove', 'kick'],
 	guildOnly: true,
 	slash: {
@@ -13,7 +13,7 @@ module.exports = {
 			guildOnly: true,
 			data: {
 				name: 'remove',
-				description: 'remove members from the team',
+				description: 'remove the mentioned members from the team',
 				options: [
 					{
 						name: 'member_1',

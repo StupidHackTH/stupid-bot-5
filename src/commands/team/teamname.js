@@ -4,7 +4,7 @@ const updateTeamList = require('../../lib/updateTeam')
 module.exports = {
 	name: 'teamname',
 	description: "change your team's name",
-	usage: 'name',
+	usage: 'teamname My Kewl Name',
 	aliases: ['changename', 'name'],
 	args: 1,
 	guildOnly: true,
