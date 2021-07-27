@@ -10,7 +10,7 @@ module.exports = {
       guildOnly: true,
       data: {
         name: 'reload',
-        description: 'reload command',
+        description: 'Reloads a command',
         options: [
           {
             name: 'command',

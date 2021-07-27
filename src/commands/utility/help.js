@@ -3,13 +3,13 @@ const { prefix } = require('../../../config.json')
 
 module.exports = {
   name: 'help',
-  description: 'Get bot info',
+  description: 'get information about how to use the bot.',
   slash: {
     registerData: {
       guildOnly: true,
       data: {
         name: 'help',
-        description: 'Get bot info',
+        description: 'get information about how to use the bot.',
         options: [
           {
             name: 'command',
@@ -30,6 +30,7 @@ module.exports = {
     else if (args.length === 0) hasArgs = false
 
     if (hasArgs) {
+      // get info about one command
       const command = commands
         .find((command) => args[0] === command.name)
 
@@ -44,26 +45,27 @@ module.exports = {
         })
         .map((field) => {
           return {
-            name: `\`${field[0]}\``,
+            name: `⠀\n${field[0]}`,
             value: `${field[1]}`
           }
         })
 
       send(Embed.Embed(
-        `Help: ${command.name}`, `type \`${prefix}help\` or \`/help\` to get a list of all commands`, "#7f03fc", commandFields
+        `${command.name}`, `type \`${prefix}help\` or \`/help\` to get a list of all commands`, "#ff03ac", commandFields
       ))
     } else {
+      // list all commands
       const commandFields = commands
         .filter((command) => !command.adminOnly)
         .map((command) => {
           return {
-            name: `\`${command.name}\``,
+            name: `⠀\n${command.name}`,
             value: `${command.description}`
           }
         })
 
       send(Embed.Embed(
-        "Help", `type \`${prefix}help <command>\` or \`/help <command>\` to get more info about a command`, "#7f03fc", commandFields
+        "Help", `type \`${prefix}help <command>\` or \`/help <command>\` to get more info about a command`, "#0af3fc", commandFields
       ))
     }
   },

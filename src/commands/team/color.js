@@ -58,7 +58,8 @@ module.exports = {
       send(Embed.Embed("🎨 Color", `A new color was set for ${role.name}: #${color.toString(16)}`, color.toString(16)))
     } catch (e) {
       console.error(e)
-      return send(Embed.SendError("Color", "The color code was not formatted correctly <#abcdef or abcdef> or there was an error"))
+      if (e.message = "HexCode was not formatted correctly.") return send(Embed.SendError("Color", "The color code was not formatted correctly <#abcdef or abcdef>"))
+      else return send(Embed.SendError("Color", "There was an error"))
     }
   },
 }

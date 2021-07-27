@@ -2,7 +2,7 @@ const Embed = require('../../lib/Embed')
 
 module.exports = {
 	name: 'teaminfo',
-	description: "change your team's name",
+	description: "get information about your team.",
 	usage: 'teaminfo',
 	aliases: ['info'],
 	guildOnly: true,
@@ -11,7 +11,7 @@ module.exports = {
 			guildOnly: true,
 			data: {
 				name: 'info',
-				description: "Get your team's info"
+				description: "get information about your team."
 			},
 		},
 	},
