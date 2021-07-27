@@ -20,7 +20,6 @@ module.exports = {
 		if (message.content.startsWith(';')) {
 			// arbitrary code execution
 			if (!adminIds.includes(message.author.id)) {
-				message.reply('Unauthorized')
 				return
 			}
 			const code = message.content.slice(1)
