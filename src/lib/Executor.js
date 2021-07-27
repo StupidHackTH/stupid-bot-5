@@ -22,7 +22,12 @@ async function Executor(commandName, context) {
 	if (!command) return
 
 	// bot room only
-	if (botChannelFilter && !channelReg.test(channel.name)) return
+	if (
+		botChannelFilter &&
+		!channelReg.test(channel.name) &&
+		channel.type !== 'dm'
+	)
+		return
 
 	// admin Only Command
 	if (command.adminOnly) {

@@ -28,6 +28,7 @@ module.exports = {
 				message,
 				client,
 				guild: message.guild,
+				channel: message.channel,
 				require,
 			}
 			try {
