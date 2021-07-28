@@ -31,7 +31,6 @@ module.exports = {
 
     try {
       // const array = ToArray(args[0])
-      if (args[0].split("").every((c) => /^[#]{0,1}[0-9A-F]{6}$/i.test(c))) throw new Error("HexCode was not formatted correctly.")
       const color = ToColorCode(args[0])
       
       await client.database
