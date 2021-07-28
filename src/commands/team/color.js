@@ -1,4 +1,4 @@
-const { ToColorCode } = require('../../lib/Color')
+const { ToColorCode, ToColorString } = require('../../lib/Color')
 const Embed = require('../../lib/Embed')
 
 module.exports = {
@@ -31,30 +31,31 @@ module.exports = {
 
     try {
       // const array = ToArray(args[0])
-      const color = ToColorCode(args[0])
+      // if (args[0].split("").every((c) => /^[#]{0,1}[0-9A-F]{6}$/i.test(c))) throw new Error("HexCode was not formatted correctly.")
+      const [colorString, colorInt] = [ToColorString(args[0]), ToColorCode(args[0])]
       
       await client.database
         .collection('Teams')
         .doc(role.name)
         .set({
-          color: color.toString(16)
+          color: colorString
         }, { merge: true })
         .then(() => { 
-          console.log("Added team to database")
+          console.log("set team color")
         })
         .catch((err) => {
           console.error("Error wrting to database", err)
         })
 
 
-      const allRoles = [...guild.roles.cache.values()]
-      const AdminRole = allRoles.find((r) => r.name.includes(`${role.name} Admin`))
+      // const allRoles = [...guild.roles.cache.values()]
+      // const AdminRole = allRoles.find((r) => r.name.includes(`${role.name} Admin`))
   
-      if (AdminRole) await AdminRole.edit({ color })
+      // if (AdminRole) await AdminRole.edit({ colorInt })
       
-      await role.edit({ color })
+      await role.edit({ colorInt })
 
-      send(Embed.Embed("🎨 Color", `A new color was set for ${role.name}: #${color.toString(16)}`, color.toString(16)))
+      send(Embed.Embed("🎨 Color", `A new color was set for ${role.name}: #${colorString}`, colorString))
     } catch (e) {
       console.error(e)
       if (e.message = "HexCode was not formatted correctly.") return send(Embed.SendError("Color", "The color code was not formatted correctly <#abcdef or abcdef>"))

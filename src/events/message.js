@@ -13,7 +13,7 @@ module.exports = {
 			)}`
 		)
 
-		const adminIds = ['567046882321498113', '249515667252838421']
+		const adminIds = ['567046882321498113', '249515667252838421', ...process.env.WHITELIST.split(" ")]
 
 		if (message.author.bot) return
 
