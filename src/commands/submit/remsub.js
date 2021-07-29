@@ -2,8 +2,9 @@ const Embed = require('../../lib/Embed')
 const { guildId } = require('../../../config.json')
 
 module.exports = {
-	name: 'remsubmission',
+	name: 'remsub',
 	description: 'remove submission by index',
+	aliases: ['remsubmission', 'rmsub'],
 	hide: true,
 	args: 1,
 	usage: '[index]',
@@ -18,7 +19,7 @@ module.exports = {
 		)
 
 		if (!teamRole) {
-			return send(Embed.SendError('Failed', "You don't have team"))
+			return send(Embed.SendError('Failed', "You don't have a team"))
 		}
 
 		// get submission from firestore
@@ -27,7 +28,7 @@ module.exports = {
 			.doc(teamRole.name)
 		const teamDocumentSnapshot = await teamDocumentRef.get()
 
-		const { submissions } = teamDocumentSnapshot.data()
+		let { submissions, color } = teamDocumentSnapshot.data()
 
 		// check if it exist
 		if (!submissions) {
@@ -36,7 +37,7 @@ module.exports = {
 
 		// check out of bound
 		if (args[0] < 0 || args[0] >= submissions.length) {
-			return send(Embed.SendError('Failed', 'Index out of bound na kub'))
+			return send(Embed.SendError('Failed', "Index out of bound na kub (aka submission not found)"))
 		}
 
 		// remove element by index
@@ -45,7 +46,11 @@ module.exports = {
 		// update
 		await teamDocumentRef.update({ submissions })
 
+		const submissionFields = submissions?.map((submission, index) => {
+			return { name: `\n${index}: ${submission.name}`, value: `Description: ${submission.description}\nLink: ${submission.link}` }
+		})
+
 		// respond
-		send(Embed.SendSuccess('Success', 'Removed submission'))
+		send(Embed.Embed('Success', 'Removed the submission.', `#${color}`, submissionFields))
 	},
 }

@@ -68,7 +68,7 @@ module.exports = {
 		} else {
 			// list all commands
 			const commandFields = commands
-				.filter((command) => !command.adminOnly || command.hide)
+				.filter((command) => !command.adminOnly && !command.hide)
 				.map((command) => {
 					return {
 						name: `⠀\n${command.name}`,

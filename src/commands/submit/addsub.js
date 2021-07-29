@@ -2,8 +2,9 @@ const Embed = require('../../lib/Embed')
 const { guildId } = require('../../../config.json')
 
 module.exports = {
-	name: 'addsubmission',
+	name: 'addsub',
 	description: 'Add submission',
+	aliases: ['addsubmission'],
 	args: 1,
 	hide: true,
 	usage: '[name] [video link]',
@@ -27,7 +28,7 @@ module.exports = {
 		)
 
 		if (!teamRole) {
-			return send(Embed.SendError('Failed', "You don't have team"))
+			return send(Embed.SendError('Add Submission', "You don't have a team"))
 		}
 
 		// get submission from firestore
@@ -36,22 +37,35 @@ module.exports = {
 			.doc(teamRole.name)
 
 		const teamDocumentSnapshot = await teamDocumentRef.get()
-		var { submissions } = teamDocumentSnapshot.data()
+		let { submissions, color } = teamDocumentSnapshot.data()
 
 		const submissionLink = args.splice(args.length - 1, 1)
 		const submissionName = args.join(' ')
 
+		const ytRegx = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/
+		if (!ytRegx.test(submissionLink)) return send(Embed.SendError('Add Submission', "The link provided has to be a youtube link"))
+
+		const currSubmission = {
+			name: submissionName,
+			link: submissionLink,
+			description: ""
+		};
+
 		// append submited video
 		if (!submissions) {
-			submissions = [{ name: submissionName, link: submissionLink }]
+			submissions = [currSubmission]
 		} else {
-			submissions.push({ name: submissionName, link: submissionLink })
+			submissions.push(currSubmission)
 		}
 
 		// update database
 		await teamDocumentRef.update({ submissions })
 		// response
 
-		send(Embed.SendSuccess('Success', 'Added submission'))
+		const submissionFields = submissions?.map((submission, index) => {
+			return { name: `\n${index}: ${submission.name}`, value: `Description: ${submission.description}\nLink: ${submission.link}` }
+		})
+
+		send(Embed.Embed('Success', 'Added the submission', `#${color}`, submissionFields))
 	},
 }

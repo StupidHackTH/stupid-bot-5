@@ -18,7 +18,7 @@ module.exports = {
 		)
 
 		if (!teamRole) {
-			return send(Embed.SendError('Failed', "You don't have team"))
+			return send(Embed.SendError('Choose Submission', "You don't have a team"))
 		}
 
 		// get submission from firestore
@@ -31,12 +31,12 @@ module.exports = {
 
 		// check if it exist
 		if (!submissions) {
-			return send(Embed.SendError('Failed', 'No submission found'))
+			return send(Embed.SendError('Choose Submission', 'No submission found'))
 		}
 
 		// check out of bound
 		if (args[0] < 0 || args[0] >= submissions.length) {
-			return send(Embed.SendError('Failed', 'Index out of bound na kub'))
+			return send(Embed.SendError('Choose Submission', 'Index out of bound na kub'))
 		}
 
 		// change index to the 0 position
@@ -46,6 +46,6 @@ module.exports = {
 		await teamDocumentRef.update({ submissions })
 
 		// respond
-		send(Embed.SendSuccess('Success', 'update submission'))
+		send(Embed.SendSuccess('Choose Submission', 'updated submission'))
 	},
 }

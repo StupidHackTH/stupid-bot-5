@@ -1,7 +1,6 @@
 const Embed = require('../../lib/Embed')
 const { prefix } = require('../../../config.json')
 const updateTeamList = require('../../lib/updateTeam')
-const { ToColorCode } = require('../../lib/Color')
 
 module.exports = {
 	name: 'add',
@@ -52,7 +51,7 @@ module.exports = {
 
 		if (!participantRole)
 			return send(
-				Embed.SendError('Add to Team', "idk there's no participants lol.")
+				Embed.SendError('Add to Team', "there's no participants in the db lol.")
 			)
 
 		const allParticipants = [...participantRole.members.values()]
@@ -63,7 +62,7 @@ module.exports = {
 			return send(
 				Embed.SendError(
 					'Add to Team',
-					"You don't a have participant and attendee role. Try /verify if you have an Eventpop reference code."
+					"You don't a have participant or an attendee role. Try /verify if you have an Eventpop reference code."
 				)
 			)
 		}
@@ -75,7 +74,7 @@ module.exports = {
 			return send(
 				Embed.SendError(
 					'Add to Team',
-					"Some of the mentioned members don't have a participant role. They'll have to verify their tickets first."
+					"Some of the mentioned members don't have a participant or attendee role. They'll have to verify their tickets first."
 				)
 			)
 		}
@@ -141,14 +140,28 @@ module.exports = {
 
 		// add role to all
 		const addRole = async () => {
+			// batch add users to user database
+			const batch = client.database.batch()
 			for await (const user of [...allowedParticipants, guildMember]) {
 				await user.roles.add(teamRole)
+
+				const userSnapshot = await client.database
+					.collection('Users')
+					.doc(user.id)
+					.get()
+
+				if (!userSnapshot.exists) {
+					const userRef = client.database.collection("Users").doc(user.id)
+					batch.set(userRef, { user: user.username })
+				}
 			}
+			await batch.commit()
 
 			const role = await guild.roles.fetch(teamRole.id)
 
 			await role.edit({ color: parseInt(color, 16) })
 
+			// update / create team
 			await client.database
 				.collection('Teams')
 				.doc(teamRole.name)
@@ -157,7 +170,7 @@ module.exports = {
 						name: teamRole.name,
 						members: [...role.members.values()].map((e) => e.id),
 						...(admin && { admins: [admin] }), // will add owner as admin if team was just created
-						...(color && { color: color }),
+						...(color && { color: color }), // will add color if team was just created
 					},
 					{ merge: true }
 				)
@@ -176,6 +189,7 @@ module.exports = {
 
 			updateTeamList(guild, client)
 
+			// get teamColor
 			const teamColor = await client.database
 				.collection('Teams')
 				.doc(teamRole.name)
@@ -187,16 +201,10 @@ module.exports = {
 				.catch((err) => {
 					console.error('Error requesting to database', err)
 				})
+
+			// set member's nickname if there isn't one yet
 			
 			const role = await guild.roles.fetch(teamRole.id)
-
-			// const AdminRole = await guild.roles
-			// 	.create({
-			// 		data: { name: `${role.name} Admin`, color: ToColorCode(teamColor || '#fcd200') }
-			// 	})
-			// 	.catch((e) => console.error("Couldn't create role.", e))
-// 
-			// await guildMember.roles.add(AdminRole)
 			
 			return send(
 				Embed.Embed(
