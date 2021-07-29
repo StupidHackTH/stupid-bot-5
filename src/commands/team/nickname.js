@@ -26,17 +26,18 @@ module.exports = {
 			},
 		},
 	},
-	async execute({ guildMember, send, args, client }) {
+	async execute({ guildMember, send, args, client, guild }) {
+		const allRoles = [...guild.roles.cache.values()]
 		const role = guildMember.roles.cache.find((e) => e.name.startsWith('Team'))
 		const participantRole = allRoles.find((r) => r.name === 'Participant')
 		const attendeeRole = allRoles.find((r) => r.name === 'Attendee')
 
-		if (!role) return send(Embed.SendError('Color', "You don't a have team yet."))
+		if (!role) return send(Embed.SendError('Nickname', "You don't a have team yet."))
 
 		// check if sender have participant role
 		if (!participantRole.members.has(guildMember.id) && !attendeeRole.members.has(guildMember.id)) {
 			return send(Embed.SendError(
-				'Add to Team',
+				'Nickname',
 				"You don't a have participant or an attendee role. Try /verify if you have an Eventpop reference code."
 			))
 		}

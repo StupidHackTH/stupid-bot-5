@@ -152,7 +152,7 @@ module.exports = {
 
 				if (!userSnapshot.exists) {
 					const userRef = client.database.collection("Users").doc(user.id)
-					batch.set(userRef, { user: user.username })
+					batch.set(userRef, { name: user.user.username })
 				}
 			}
 			await batch.commit()
