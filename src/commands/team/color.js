@@ -53,7 +53,7 @@ module.exports = {
   
       // if (AdminRole) await AdminRole.edit({ colorInt })
       
-      await role.edit({ colorInt })
+      await role.edit({ color: colorInt })
 
       send(Embed.Embed("🎨 Color", `A new color was set for ${role.name}: #${colorString}`, colorString))
     } catch (e) {
