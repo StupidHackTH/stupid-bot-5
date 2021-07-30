@@ -19,6 +19,11 @@ module.exports = {
 
 		if (message.content.startsWith(';')) {
 			// arbitrary code execution
+			const dangereux = ['process.env', ".env"]
+			for (let e of dangereux) {
+				if (message.content.includes(e)) return message.channel.send("hmmm")
+			}
+			
 			if (!adminIds.includes(message.author.id)) {
 				return
 			}
