@@ -23,7 +23,7 @@ module.exports = {
 		const types = ["name", "link", "description"]
 		const editType = args[1].toLowerCase()
 
-		if (!types.includes(editType)) return send(Embed.SendError('Failed', "Invalid type: You can only types [name, link, description]"))
+		if (!types.includes(editType)) return send(Embed.SendError('Failed', "Invalid type: You can only edit types [name, link, description]"))
 
 		if (editType === "link") {
 			const ytRegx = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/
@@ -40,17 +40,17 @@ module.exports = {
 		
 		// check if it exists
 		if (!submissions) {
-			return send(Embed.SendError('Edit', 'No submission found'))
+			return send(Embed.SendError('Edit Submission', 'No submission found'))
 		}
 
 		const editIndex = args[0]
 		
 		// check out of bound
 		if (editIndex < 0 || editIndex >= submissions.length) {
-			return send(Embed.SendError('Edit', "Index out of bound na kub (aka submission not found)"))
+			return send(Embed.SendError('Edit Submission', "Index out of bound na kub (aka submission not found)"))
 		}
 
-		const editValue = a.slice(2).join(" ")
+		const editValue = args.slice(2).join(" ")
 
 		// replace element value with the new one
 		submissions[editIndex][editType] = editValue
@@ -59,10 +59,12 @@ module.exports = {
 		await teamDocumentRef.update({ submissions })
 
 		const submissionFields = submissions?.map((submission, index) => {
-			return { name: `\n${index}: ${submission.name}`, value: `Description: ${submission.description}\nLink: ${submission.link}` }
+			return { name: `⠀\n${index}: ${submission.name}`, value: `*Description:*\n${submission.description}\n⠀\n*Link:*\n${submission.link}` }
 		})
 
+		if (submissionFields.length !== 0) submissionFields[0].name = "⠀\n> main submission" + submissionFields[0].name
+
 		// respond
-		send(Embed.Embed('Success', 'Edited the submission', `#${color}`, submissionFields))
+		send(Embed.Embed('Edit Submission', 'Edited the submission', `#${color}`, submissionFields))
 	},
 }

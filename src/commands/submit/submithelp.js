@@ -23,19 +23,23 @@ module.exports = {
 					'#000000',
 					[
 						{
-							name: 'stp listsubmission',
+							name: 'stp listsub',
 							value: "list all of your team's submission by order.",
 						},
 						{
-							name: 'stp addsubmission [submission name] [link]',
+							name: 'stp addsub [submission name] [link]',
 							value: 'add submission.',
 						},
 						{
-							name: 'stp remsubmission [index]',
+							name: 'stp editsub [index] [name|description|link] [value]',
+							value: 'edit a submission.',
+						},
+						{
+							name: 'stp remsub [index]',
 							value: 'remove submission by index.',
 						},
 						{
-							name: 'stp choosemainsubmission [index]',
+							name: 'stp choosemainsub [index]',
 							value: 'choose main submission (by pushing [index] to the first)',
 						},
 					]

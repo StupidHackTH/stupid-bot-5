@@ -1,6 +1,7 @@
 const Embed = require('../../lib/Embed')
 const { prefix } = require('../../../config.json')
-const updateTeamList = require('../../lib/updateTeam')
+const updateTeamList = require('../../lib/updateTeam');
+const { Message } = require('discord.js');
 
 module.exports = {
 	name: 'add',

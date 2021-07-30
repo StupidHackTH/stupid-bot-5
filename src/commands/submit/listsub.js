@@ -29,8 +29,10 @@ module.exports = {
 		const { submissions } = teamDocumentSnapshot.data()
 
 		const submissionFields = submissions?.map((submission, index) => {
-			return { name: `\n${index}: ${submission.name}`, value: `Description: ${submission.description}\nLink: ${submission.link}` }
+			return { name: `⠀\n${index}: ${submission.name}`, value: `*Description:*\n${submission.description}\n⠀\n*Link:*\n${submission.link}` }
 		})
+
+		if (submissionFields.length !== 0) submissionFields[0].name = "⠀\n> main submission" + submissionFields[0].name
 
 		// format data as embed
 		const embed = Embed.Embed(
@@ -44,7 +46,7 @@ module.exports = {
 		send(embed)
 
 		// little easter egg
-		if (!submissionFields) {
+		if (submissionFields.length === 0) {
 			setTimeout(() => send("oh, looks like you haven't submit anything"), 2000)
 			setTimeout(() => send('no hurry, you have time ( o r d o y o u ? )'), 5000)
 		}

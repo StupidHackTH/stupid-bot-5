@@ -39,8 +39,8 @@ module.exports = {
 		const teamDocumentSnapshot = await teamDocumentRef.get()
 		let { submissions, color } = teamDocumentSnapshot.data()
 
-		const submissionLink = args.splice(args.length - 1, 1)
-		const submissionName = args.join(' ')
+		const submissionLink = args[args.length-1]
+		const submissionName = args.slice(0, args.length-1).join(' ')
 
 		const ytRegx = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/
 		if (!ytRegx.test(submissionLink)) return send(Embed.SendError('Add Submission', "The link provided has to be a youtube link"))
@@ -63,8 +63,10 @@ module.exports = {
 		// response
 
 		const submissionFields = submissions?.map((submission, index) => {
-			return { name: `\n${index}: ${submission.name}`, value: `Description: ${submission.description}\nLink: ${submission.link}` }
+			return { name: `⠀\n${index}: ${submission.name}`, value: `*Description:*\n${submission.description}\n⠀\n*Link:*\n${submission.link}` }
 		})
+
+		if (submissionFields.length !== 0) submissionFields[0].name = "⠀\n> main submission" + submissionFields[0].name
 
 		send(Embed.Embed('Success', 'Added the submission', `#${color}`, submissionFields))
 	},

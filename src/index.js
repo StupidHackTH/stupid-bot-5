@@ -34,7 +34,7 @@ firebase
   .signInWithEmailAndPassword(
     ...process.env.AUDIENCE_APP_CREDENTIALS.split(':'),
   )
-  .then(() => {
+  .then(async () => {
     console.log(
       'Authence app authenticated as',
       firebase.auth().currentUser.uid,

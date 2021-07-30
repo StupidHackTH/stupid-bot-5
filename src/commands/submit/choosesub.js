@@ -2,9 +2,10 @@ const Embed = require('../../lib/Embed')
 const { guildId } = require('../../../config.json')
 
 module.exports = {
-	name: 'choosemainsubmission',
+	name: 'choosemainsub',
 	description: 'choose main submission by index',
 	hide: true,
+	aliases: ['choosemainsubmission', 'choosesub'],
 	args: 1,
 	usage: '[index]',
 	async execute({ send, member, client, args }) {
@@ -27,7 +28,7 @@ module.exports = {
 			.doc(teamRole.name)
 		const teamDocumentSnapshot = await teamDocumentRef.get()
 
-		const { submissions } = teamDocumentSnapshot.data()
+		const { submissions, color } = teamDocumentSnapshot.data()
 
 		// check if it exist
 		if (!submissions) {
@@ -36,7 +37,7 @@ module.exports = {
 
 		// check out of bound
 		if (args[0] < 0 || args[0] >= submissions.length) {
-			return send(Embed.SendError('Choose Submission', 'Index out of bound na kub'))
+			return send(Embed.SendError('Choose Submission', 'Index out of bound na kub (aka submission not found)'))
 		}
 
 		// change index to the 0 position
@@ -45,7 +46,21 @@ module.exports = {
 		// update
 		await teamDocumentRef.update({ submissions })
 
+		const submissionFields = submissions?.map((submission, index) => {
+			return { name: `⠀\n${index}: ${submission.name}`, value: `*Description:*\n${submission.description}\n⠀\n*Link:*\n${submission.link}` }
+		})
+
+		if (submissionFields.length !== 0) submissionFields[0].name = "⠀\n> main submission" + submissionFields[0].name
+
+		// format data as embed
+		const embed = Embed.Embed(
+			'Edit Submissions',
+			'Here is the new list of your submissions',
+			`#${color}`,
+			submissionFields
+		)
+
 		// respond
-		send(Embed.SendSuccess('Choose Submission', 'updated submission'))
+		send(embed)
 	},
 }

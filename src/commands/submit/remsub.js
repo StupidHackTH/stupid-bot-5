@@ -47,8 +47,10 @@ module.exports = {
 		await teamDocumentRef.update({ submissions })
 
 		const submissionFields = submissions?.map((submission, index) => {
-			return { name: `\n${index}: ${submission.name}`, value: `Description: ${submission.description}\nLink: ${submission.link}` }
+			return { name: `⠀\n${index}: ${submission.name}`, value: `*Description:*\n${submission.description}\n⠀\n*Link:*\n${submission.link}` }
 		})
+
+		if (submissionFields.length !== 0) submissionFields[0].name = "⠀\n> main submission" + submissionFields[0].name
 
 		// respond
 		send(Embed.Embed('Success', 'Removed the submission.', `#${color}`, submissionFields))
