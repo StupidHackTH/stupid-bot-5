@@ -168,10 +168,10 @@ module.exports = {
 				.doc(teamRole.name)
 				.set(
 					{
-						name: teamRole.name,
+						...(admin && { name: teamRole.name }),
 						members: [...role.members.values()].map((e) => e.id),
 						...(admin && { admins: [admin] }), // will add owner as admin if team was just created
-						...(color && { color: color }), // will add color if team was just created
+						...(admin && { color: color }), // will add color if team was just created
 					},
 					{ merge: true }
 				)
