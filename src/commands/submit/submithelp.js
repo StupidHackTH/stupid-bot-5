@@ -19,7 +19,7 @@ module.exports = {
 			channel.send(
 				Embed.Embed(
 					'Submit Command',
-					'you can submit via DM to keep your submission secret from other teams\n The first submission in the list will be the main submission will be the main submission,\nNote that submission name is only there to make it easier to remember (and it will also be displayed in the stupid hackathon website)',
+					'You can submit via DM to keep your submission secret from other teams\n The first submission in the list will be the main submission will be the main submission,\nNote that submission name is only there to make it easier to remember (and it will also be displayed in the stupid hackathon website)\nPlease Note that it\'s required that you have to provide a youtube link for the submission too.',
 					'#000000',
 					[
 						{
