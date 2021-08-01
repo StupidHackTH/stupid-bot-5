@@ -30,7 +30,6 @@ var firebaseConfig = {
 // firebase setup
 firebase.initializeApp(firebaseConfig)
 firebase
-<<<<<<< HEAD
 	.auth()
 	.signInWithEmailAndPassword(
 		...process.env.AUDIENCE_APP_CREDENTIALS.split(':')
@@ -47,24 +46,6 @@ firebase
 		console.log("Can't connect to database")
 		console.error(e)
 	})
-=======
-  .auth()
-  .signInWithEmailAndPassword(
-    ...process.env.AUDIENCE_APP_CREDENTIALS.split(':'),
-  )
-  .then(async () => {
-    console.log(
-      'Authence app authenticated as',
-      firebase.auth().currentUser.uid,
-    )
-    client.database = firebase.firestore()
-    console.log('Link bot to database')
-  })
-  .catch((e) => {
-    console.log("Can't connect to database")
-    console.error(e)
-  })
->>>>>>> 1f7780c079027e01d5bfd71833bbda019732c5fa
 
 loadCommands(client)
 loadEvents(client)

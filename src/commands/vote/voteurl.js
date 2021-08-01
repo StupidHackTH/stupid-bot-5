@@ -13,7 +13,7 @@ module.exports = {
 		try {
 			const userObj = (await docRef.get()).data()
 
-			var url = 'https://www.google.com/'
+			var url = 'https://sht-5.vercel.app/vote?id='
 
 			if (!userObj) {
 				/* if no user */
