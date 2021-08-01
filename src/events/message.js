@@ -49,7 +49,7 @@ module.exports = {
 				.filter((e) => allowedTeam.includes(e))
 			console.log(votedTeam)
 			voted = {}
-			var reply = 'You voted team: '
+			var reply = `${message.author} voted team: `
 			for (var i = 1; i < 5 && votedTeam[i - 1] != undefined; i++) {
 				console.log(votedTeam[i - 1])
 				if (allowedTeam.includes(votedTeam[i - 1])) {
