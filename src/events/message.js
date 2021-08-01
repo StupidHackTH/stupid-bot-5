@@ -1,8 +1,7 @@
-const { prefix } = require('../../config.json')
+const { prefix, botChannelFilter } = require('../../config.json')
 const Discord = require('discord.js')
 const Executor = require('../lib/Executor.js')
 const Authenticate = require('../lib/Authentication')
-const { ToColorCode } = require('../lib/Color')
 
 module.exports = {
 	name: 'message',
@@ -13,6 +12,13 @@ module.exports = {
 				message.content
 			)}`
 		)
+
+		if (
+			message.channel.type != 'dm' &&
+			botChannelFilter &&
+			!message.channel.match('bot')
+		)
+			return
 
 		const allowedTeam = [
 			'00',
@@ -54,7 +60,7 @@ module.exports = {
 				console.log(votedTeam[i - 1])
 				if (allowedTeam.includes(votedTeam[i - 1])) {
 					voted[String(i)] = 'team' + votedTeam[i - 1]
-					reply += 'team' + votedTeam[i - 1]
+					reply += 'team' + votedTeam[i - 1] + ' '
 				}
 			}
 			const doc = client.database
