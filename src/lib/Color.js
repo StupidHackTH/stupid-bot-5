@@ -1,5 +1,3 @@
-module.exports = ColorPicker
-
 /**
  * Return ColorPicker object
  * @param {array} Range - Array of hexcode as string or array
@@ -107,13 +105,31 @@ function ColorPicker(Range) {
 }
 
 const ToColorCode = (s) => {
-  const colorString = s.split("").filter((e) => e !== "#").join("")
+  const match = s.match(/^#?(([a-fA-F0-9]{3}){1,2}$)/)
+  if (!match) throw new Error('HexCode was not formatted correctly.')
 
-  if (colorString.length !== 6) {
-    throw new Error('HexCode was not formatted correctly.')
+  const colorString = match[1]
+
+  if (colorString.length === 3) {
+    let res = colorString.split("").map((c) => c+c).join("")
+    return parseInt(res, 16)
   }
-
-  return parseInt(colorString, 16)
+  else if (colorString.length === 6) {
+    return parseInt(colorString, 16)
+  }
+  else throw new Error('HexCode was not formatted correctly.')
 }
 
-module.exports = {ToColorCode}
+const ToColorString = (s) => {
+  const match = s.match(/^#?(([a-fA-F0-9]{3}){1,2}$)/)
+  if (!match) throw new Error('HexCode was not formatted correctly.')
+
+  const colorString = match[1]
+
+  if (colorString.length === 3 || colorString.length === 6) {
+    return colorString
+  }
+  else throw new Error('HexCode was not formatted correctly.')
+}
+
+module.exports = { ToColorCode, ToColorString }

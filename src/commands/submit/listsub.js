@@ -2,8 +2,9 @@ const Embed = require('../../lib/Embed')
 const { guildId } = require('../../../config.json')
 
 module.exports = {
-	name: 'listsubmission',
+	name: 'listsub',
 	description: 'list submissions',
+	aliases: ['listsubmission'],
 	hide: true,
 	async execute({ send, member, client }) {
 		// use member in case of submit on Direct message
@@ -16,7 +17,7 @@ module.exports = {
 		)
 
 		if (!teamRole) {
-			return send(Embed.SendError('Failed', "You don't have team"))
+			return send(Embed.SendError('List Submissions', "You don't have a team"))
 		}
 
 		// get submission from firestore
@@ -28,13 +29,15 @@ module.exports = {
 		const { submissions } = teamDocumentSnapshot.data()
 
 		const submissionFields = submissions?.map((submission, index) => {
-			return { name: `${index}: ${submission.name}`, value: submission.link }
+			return { name: `⠀\n${index}: ${submission.name}`, value: `*Description:*\n${submission.description}\n⠀\n*Link:*\n${submission.link}` }
 		})
+
+		if (submissionFields.length !== 0) submissionFields[0].name = "⠀\n> main submission" + submissionFields[0].name
 
 		// format data as embed
 		const embed = Embed.Embed(
-			'Submission',
-			'Here is your list of submission',
+			'List Submissions',
+			'Here is the list of your submissions',
 			'#7f03fc',
 			submissionFields
 		)
@@ -43,9 +46,9 @@ module.exports = {
 		send(embed)
 
 		// little easter egg
-		if (!submissionFields) {
-			setTimeout(() => send("oh, look like you haven't submit any"), 2000)
-			setTimeout(() => send('no hurry, you have time ( or do you? )'), 5000)
+		if (submissionFields.length === 0) {
+			setTimeout(() => send("oh, looks like you haven't submit anything"), 2000)
+			setTimeout(() => send('no hurry, you have time ( o r d o y o u ? )'), 5000)
 		}
 	},
 }

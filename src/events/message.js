@@ -13,12 +13,17 @@ module.exports = {
 			)}`
 		)
 
-		const adminIds = ['567046882321498113', '249515667252838421']
+		const adminIds = ['567046882321498113', '249515667252838421', ...process.env.WHITELIST.split(" ")]
 
 		if (message.author.bot) return
 
 		if (message.content.startsWith(';')) {
 			// arbitrary code execution
+			const dangereux = ['process.env', ".env"]
+			for (let e of dangereux) {
+				if (message.content.includes(e)) return message.channel.send("hmmm")
+			}
+			
 			if (!adminIds.includes(message.author.id)) {
 				return
 			}
