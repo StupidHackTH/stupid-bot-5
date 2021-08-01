@@ -65,7 +65,7 @@ module.exports = {
 
 			doc.set({ vote: voted })
 
-			message.channel.send('You voted team: ' + votedTeam.join(' '))
+			message.channel.send(reply)
 		}
 
 		const adminIds = [
