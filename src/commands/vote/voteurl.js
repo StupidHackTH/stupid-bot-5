@@ -5,7 +5,8 @@ module.exports = {
 	name: 'voteurl',
 	description: 'get voteurl',
 	hide: true,
-	async execute({ member, client }) {
+	async execute({ member, client, send }) {
+		/*
 		const userId = member.id
 
 		const docRef = client.database.collection('Users').doc(userId)
@@ -16,7 +17,7 @@ module.exports = {
 			var url = 'https://sht-5.vercel.app/vote?id='
 
 			if (!userObj) {
-				/* if no user */
+				// if no user
 				const sessionRef = await client.database.collection('VoteSession').add({
 					type: 'discord',
 					vote: {},
@@ -24,7 +25,7 @@ module.exports = {
 				url += sessionRef.id
 				await docRef.set({ voteSessionId: sessionRef.id })
 			} else if (!userObj.voteSessionId) {
-				/* if have user but no session */
+				// if have user but no session
 				const sessionRef = await client.database.collection('VoteSession').add({
 					type: 'discord',
 					vote: {},
@@ -32,7 +33,7 @@ module.exports = {
 				url += sessionRef.id
 				await docRef.set({ voteSessionId: sessionRef.id })
 			} else {
-				/* already have session */
+				// already have session
 				url += userObj.voteSessionId
 			}
 
@@ -42,5 +43,7 @@ module.exports = {
 		} catch (e) {
 			console.error(e)
 		}
+*/
+		send("vote over")
 	},
 }
