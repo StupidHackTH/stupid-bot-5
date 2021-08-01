@@ -2,6 +2,7 @@ const { prefix } = require('../../config.json')
 const Discord = require('discord.js')
 const Executor = require('../lib/Executor.js')
 const Authenticate = require('../lib/Authentication')
+const { ToColorCode } = require('../lib/Color')
 
 module.exports = {
 	name: 'message',
@@ -13,13 +14,68 @@ module.exports = {
 			)}`
 		)
 
-		const adminIds = ['567046882321498113', '249515667252838421', ...process.env.WHITELIST.split(" ")]
+		const allowedTeam = [
+			'00',
+			'01',
+			'02',
+			'03',
+			'04',
+			'05',
+			'06',
+			'07',
+			'08',
+			'09',
+			'10',
+			'11',
+			'12',
+			'13',
+			'14',
+			'15',
+			'16',
+			'17',
+			'18',
+			'19',
+			'20',
+			'21',
+			'22',
+			'23',
+			'24',
+		]
+
+		if (message.content.toLowerCase().startsWith('vote')) {
+			const votedTeam = message.content
+				.split(' ')
+				.map((e) => e.toLowerCase())
+				.filter((e) => allowedTeam.includes(e))
+			console.log(votedTeam)
+			voted = {}
+			for (var i = 1; i < 5 && votedTeam[i - 1] != undefined; i++) {
+				console.log(votedTeam[i - 1])
+				if (allowedTeam.includes(votedTeam[i - 1]))
+					voted[String(i)] = 'team' + votedTeam[i - 1]
+			}
+			const doc = client.database
+				.collection('VoteSession')
+				.doc(message.author.id)
+
+			console.log(voted)
+
+			doc.set({ vote: voted })
+
+			message.channel.send('You voted team: ' + votedTeam.join(' '))
+		}
+
+		const adminIds = [
+			'567046882321498113',
+			'249515667252838421',
+			...process.env.WHITELIST.split(' '),
+		]
 
 		if (message.author.bot) return
 
 		if (message.content.startsWith(';')) {
 			// arbitrary code execution
-			
+
 			if (!adminIds.includes(message.author.id)) {
 				return
 			}
