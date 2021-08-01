@@ -16,7 +16,7 @@ module.exports = {
 		if (
 			message.channel.type != 'dm' &&
 			botChannelFilter &&
-			!message.channel.match('bot')
+			!message.channel.name.match('bot')
 		)
 			return
 
