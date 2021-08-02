@@ -26,10 +26,6 @@
   "devDependencies": {
     "nodemon": "^2.0.12"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://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@github.com/StupidHackTH/stupid-bot-5.git"
-  },
   "keywords": [],
   "bugs": {
     "url": "https://github.com/StupidHackTH/stupid-bot-5/issues"
