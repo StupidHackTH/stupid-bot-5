@@ -1,10 +1,10 @@
 # stupid-bot-5
 
-Discord bot for Stupid Hackathon 5
+discord bot for stupid Hackathon 5
 
 Most of the starting code came from `Getting started` in the `discord.js` guide
 
-# isn't slash commands supported in discord.js???
+# isn't slash commands not supported in discord.js???
 
 yeah, but Tar as done some black magic to make it work (you can see how in the `/tools` directory)
 
