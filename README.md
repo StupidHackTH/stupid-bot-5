@@ -6,7 +6,7 @@ Most of the starting code came from `Getting started` in the [discord.js](https:
 
 # isn't slash commands not supported in discord.js???
 
-yeah, but Tar as done some black magic to make it work (you can see how in the `/tools` directory)
+yeah, but Tar has done some black magic to make it work (you can see how in the `/tools` directory)
 
 # how was it deployed?
 
