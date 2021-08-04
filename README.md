@@ -2,7 +2,7 @@
 
 discord bot for stupid Hackathon 5
 
-Most of the starting code came from `Getting started` in the `discord.js` guide
+Most of the starting code came from `Getting started` in the [discord.js](https://discordjs.guide/) guide
 
 # isn't slash commands not supported in discord.js???
 
@@ -11,8 +11,6 @@ yeah, but Tar as done some black magic to make it work (you can see how in the `
 # how was it deployed?
 
 heroku... (sad noises)
-
-https://discordjs.guide/
 
 # how 2 use the bot
 
